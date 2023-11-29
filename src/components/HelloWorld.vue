@@ -5,8 +5,9 @@
     <button>Save <i class="fa-solid fa-floppy-disk"></i></button>
     <button>Undo <i class="fa-solid fa-arrow-rotate-left"></i></button>
     <button>Redo <i class="fa-solid fa-rotate-right"></i></button>
-    <button>Delete <i class="fa-solid fa-eraser"></i></button>
-    <button>clear <i class="fa-solid fa-trash"></i></button>
+    <button @click="del()">Delete <i class="fa-solid fa-eraser"></i></button>
+    <button @click="clr()">clear <i class="fa-solid fa-trash"></i></button>
+    <button @click="move()">move <i class="fas fa-arrows-alt move-icon"></i></button>
     <button>copy <i class="fa-solid fa-copy"></i></button>
   </div>
   <div class="paint">
@@ -27,35 +28,132 @@
     </div>
       </div>
       <div class="block">
-     <button ><div class="square"></div></button>
+     <button @click="square()" ><div class="square"></div></button>
      <label >square</label>
     </div>
       <div class="block">
-     <button ><div class="rectengle"></div></button>
+     <button @click="rect()" ><div class="rectengle"></div></button>
      <label >rectengle</label>
     </div>
       <div class="block">
-        <button ><div class="circle"></div></button>
+        <button @click="circle()" ><div class="circle"></div></button>
      <label >circle</label>
     </div>
       <div class="block">
-     <button ><div class="triangle-up"></div></button>
+     <button @click="triangle()" ><div class="triangle-up"></div></button>
      <label >triangle</label>
     </div>
     <div class="block">
-      <button ><div class="oval"></div></button>
+      <button @click="ellipse()"><div class="oval"></div></button>
       <label >ellips</label>
      </div>
     <div class="block">
-      <button style="width:30px;"><i class="fa-solid fa-lines-leaning"></i></button>
+      <button @click="line()" style="width:30px;"><i class="fa-solid fa-lines-leaning"></i></button>
       <label >line</label>
      </div>
     </div>
   </div>
-    <div class="bord" style="border: solid black 2px; border-radius: 10px; background-color:#ffffff ">
-  <v-stage  :config="configKonva" >
+    <div class="bord" style="border: solid black 2px; border-radius: 10px; background-color:#ffffff;margin-left:2px ">
+  <v-stage :config="configKonva" ref="stage" @mousedown="startDrawing" @mouseup="stopDrawing" @mousemove="draw" >
     <v-layer>
-      <v-circle :config="configCircle"></v-circle>
+      <!-- drawing rectangles -->
+      <v-rect
+       v-for="(rect, index) in rectangles"
+        :key="index"
+        :config="{
+          x: rect.x,
+          y: rect.y,
+          width: rect.width,
+          height: rect.height,
+          fill: 'blue',
+          stroke: 'black',
+          strokeWidth: 2 ,
+       }"
+        @click="shapeClicked('rect', index)"
+      >
+
+     </v-rect>
+     <!-- drawing circles -->
+     <v-circle
+      v-for="(circle, index) in circles"
+        :key="index"
+        :config="{
+          x: circle.x,
+          y: circle.y,
+          radius:circle.radius,
+          fill: 'blue',
+          stroke: 'black',
+          strokeWidth: 2,
+        }"
+         @click="shapeClicked('circle', index)"
+     >
+
+     </v-circle>
+     <!-- drawing ellipses -->
+     <v-ellipse
+        v-for="(ellipse, index) in ellipses"
+        :key="index"
+        :config="{
+          x: ellipse.x,
+          y: ellipse.y,
+          radiusX:ellipse.radiusX,
+          radiusY:ellipse.radiusY,
+          fill: 'red',
+          stroke: 'black',
+          strokeWidth: 2,
+        }"
+       @click="shapeClicked('ellipse', index)"
+     >
+
+     </v-ellipse>
+     <!-- drawing line segment -->
+     <v-line
+       v-for="(line, index) in lines"
+        :key="index"
+        :config="{
+          points:line.points,
+          stroke: 'black',
+          strokeWidth: 2,
+        }"
+         @click="shapeClicked('line', index)"
+     >
+
+     </v-line>
+  <!-- square -->
+  <v-regular-polygon
+   v-for="(square, index) in squares"
+        :key="index"
+        :config="{
+          x: square.x,
+          y: square.y,
+          sides:4,
+          radius:square.radius,
+          fill: 'blue',
+          stroke: 'black',
+          strokeWidth: 2,
+        }"
+      @click="shapeClicked('square', index)"
+  >
+
+  </v-regular-polygon>
+  <v-regular-polygon
+   v-for="(triangle, index) in triangles"
+        :key="index"
+        :config="{
+          x: triangle.x,
+          y: triangle.y,
+          sides:3,
+          radius:triangle.radius,
+          fill: 'red',
+          stroke: 'black',
+          strokeWidth: 2,
+        }"
+      @click="shapeClicked('triangle', index)"
+  >
+
+  </v-regular-polygon>
+  
+
     </v-layer>
   </v-stage>
 </div>
@@ -72,23 +170,371 @@ export default {
   name: 'HelloWorld',
   data() {
     return {
-      value:null ,
-      colorfil:null,
+      value: null,
+      colorFill: null,
       configKonva: {
         width: 800,
         height: 600,
-      }
-    }
+      },
+      isdraw: false,
+      rectangles:[],
+      squares:[],
+      lines:[],
+      circles:[],
+      ellipses:[],
+      triangles:[],
+      rectangle:false,
+      circ:false,
+      ellips:false,
+      lin:false,
+      sqrt:false,
+      tria:false,
+      delete:false,
+      mov:false,
+      currentShape:null,
+    };
   },
-  methods:{
+  methods: {
     setup() {
-       const pureColor = ref<ColorInputWithoutInstance>("red");
-       return { pureColor }
-     },
-  }
+      const pureColor = ref<ColorInputWithoutInstance>("red");
+      return { pureColor };
+    },
+    rect(){
+      this.rectangle=true;
+    },
+    ellipse()
+    {
+      this.ellips=true;
+    },
+    circle()
+    {
+      this.circ=true;
+    },
+    line()
+    {
+         this.lin=true;
+    },
+    square()
+    {
+      
+         this.sqrt=true;
+    },
+    triangle()
+    {
+        this.tria=true;
+    },
+    clr()
+    {
+      this.circles=[];
+      this.lines=[];
+      this.squares=[];
+      this.rectangles=[];
+      this.triangles=[];
+      this.ellipses=[];
+    
+    },
+     shapeClicked(type, index) {
+     if(type==='triangle')
+     {
+        if(this.delete)
+        {
+         
+              this.triangles.splice(index,1);
+              this.delete=false;
+        }
+        if(this.mov)
+        {
+          this.triangles[index].draggable=true;
+         
+        }
+       
+     }
+     else if(type==='circle')
+     {
+          if(this.delete)
+        {
+         
+              this.circles.splice(index,1);
+                this.delete=false;
+        }
+       
+     }
+     else if(type==='line')
+     {
+             if(this.delete)
+        {
+         
+              this.lines.splice(index,1);
+                this.delete=false;
+        }
+       
+     }
+     else if(type==='rect')
+     {
+             if(this.delete)
+        {
+         
+              this.rectangles.splice(index,1);
+                this.delete=false;
+        }
+       
+     }
+     else if(type==='ellipse')
+     {
+             if(this.delete)
+        {
+         
+              this.ellipses.splice(index,1);
+                this.delete=false;
+        }
+       
+     }
+     else if(type==='square')
+     {
+               if(this.delete)
+        {
+         
+              this.squares.splice(index,1);
+                this.delete=false;
+        }
+       
+     }
+
+    },
+
+    del()
+    {
+          this.delete=true;
+    },
+    move()
+    {
+      this.mov=true;
+    },
+    
+      startDrawing() {
+     if(this.rectangle===true)
+      {
+          this.isdraw = true;
+      const stage = this.$refs.stage.getStage();
+      if (stage) {
+        const position = stage.getPointerPosition();
+        if (position) {
+          this.currentShape = {
+            x: position.x,
+            y: position.y,
+            width: 0,
+            height: 0,
+          };
+        }
+      }
+      }
+      else if(this.circ===true){
+                this.isdraw = true;
+      const stage = this.$refs.stage.getStage();
+      if (stage) {
+        const position = stage.getPointerPosition();
+        if (position) {
+          this.currentShape = {
+            x: position.x,
+            y: position.y,
+           radius: 0,
+          };
+        }
+      }
+      }
+      else if(this.ellips===true)
+      {
+           this.isdraw = true;
+          const stage = this.$refs.stage.getStage();
+          if (stage) {
+            const position = stage.getPointerPosition();
+            if (position) {
+              this.currentShape = {
+                x: position.x,
+                y: position.y,
+              radiusX: 0,
+              radiusY:0
+              };
+            }
+          }
+      }
+      else if(this.lin===true)
+      {
+              this.isdraw = true;
+          const stage = this.$refs.stage.getStage();
+          if (stage) {
+            const position = stage.getPointerPosition();
+            if (position) {
+              this.currentShape = {
+             points: [position.x, position.y]
+              };
+            }
+          }
+      }
+      else if(this.sqrt===true)
+      {
+            this.isdraw = true;
+          const stage = this.$refs.stage.getStage();
+          if (stage) {
+            const position = stage.getPointerPosition();
+            if (position) {
+              this.currentShape = {
+                x: position.x,
+                y: position.y,
+                radius:0
+              };
+            }
+          }
+      }
+      else if(this.tria)
+      {
+          this.isdraw = true;
+          const stage = this.$refs.stage.getStage();
+          if (stage) {
+            const position = stage.getPointerPosition();
+            if (position) {
+              this.currentShape = {
+                x: position.x,
+                y: position.y,
+                radius:0
+              };
+            }
+          }
+      }
   
+     
+      
+    
+    },
+    stopDrawing() {
+     
+          if (this.isdraw) {
+        this.isdraw = false;
+        if(this.circ)
+        this.circles.push({ ...this.currentShape });
+      else if(this.rectangle)
+      this.rectangles.push({...this.currentShape});
+      else if(this.ellips)
+            this.ellipses.push({...this.currentShape});
+      else if(this.lin)
+           this.lines.push({...this.currentShape});
+      else if(this.sqrt)
+           this.squares.push({...this.currentShape});
+      else if(this.tria)
+            this.triangles.push({...this.currentShape});    
+
+
+
+        this.currentShape = null;
+        this.circ=false;
+        this.ellips=false;
+        this.rectangle=false;
+        this.lin=false;
+        this.sqrt=false;
+        this.tria=false;
+        this.mov = false;
+      }
+     
+      
+      
+    
+    },
+    draw() {
+      if(this.rectangle)
+      {
+            if (this.isdraw) {
+        const stage = this.$refs.stage.getStage();
+        if (stage) {
+          const position = stage.getPointerPosition();
+          if (position) {
+            this.currentShape.width = position.x - this.currentShape.x;
+            this.currentShape.height = position.y - this.currentShape.y;
+          }
+        }
+      }
+      }
+    //--------------------------------------------------------------------------------
+      else if(this.circ)
+      {
+          if (this.isdraw) {
+        const stage = this.$refs.stage.getStage();
+        if (stage) {
+          const position = stage.getPointerPosition();
+          if (position) {
+            this.currentShape.radius = Math.sqrt(
+                Math.pow(position.x - this.currentShape.x, 2) + Math.pow(position.y - this.currentShape.y, 2));
+          }
+        }
+      }
+      }
+      //************************************************************************************************** */
+      else if(this.ellips)
+      {
+            if (this.isdraw) {
+        const stage = this.$refs.stage.getStage();
+        if (stage) {
+          const position = stage.getPointerPosition();
+          if (position) {
+            this.currentShape.radiusX = Math.abs(position.x - this.currentShape.x);
+            this.currentShape.radiusY=Math.abs(position.y - this.currentShape.y);
+          }
+        }
+      }
+      }
+      //******************************************** */
+      else if(this.lin)
+      {
+            if (this.isdraw) {
+        const stage = this.$refs.stage.getStage();
+        if (stage) {
+          const position = stage.getPointerPosition();
+          if (position) {
+             this.currentShape.points[2] = position.x;
+          this.currentShape.points[3] = position.y;
+           
+          }
+        }
+      }
+      }
+      //******************************************** */
+      else if(this.sqrt)
+      {
+            if (this.isdraw) {
+        const stage = this.$refs.stage.getStage();
+        if (stage) {
+          const position = stage.getPointerPosition();
+          if (position) {
+           
+            this.currentShape.radius=Math.sqrt(
+                Math.pow(position.x - this.currentShape.x, 2) + Math.pow(position.y - this.currentShape.y, 2));
+          }
+        }
+      }
+      }
+      //************************************ **/
+      else if(this.tria)
+      {
+             if (this.isdraw) {
+        const stage = this.$refs.stage.getStage();
+        if (stage) {
+          const position = stage.getPointerPosition();
+          if (position) {
+           
+            this.currentShape.radius=Math.sqrt(
+                Math.pow(position.x - this.currentShape.x, 2) + Math.pow(position.y - this.currentShape.y, 2));
+          }
+        }
+      }
+      }
+    
+    },
+  },
 };
 </script>
+
+
+
+
 
 <style>
 .paint{

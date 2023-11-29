@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@babel/plugin-transform-class-properties": "^7.23.3",
     "@canvasjs/vue-charts": "^1.0.1",
     "@syncfusion/ej2-vue-inputs": "^23.2.4",
     "core-js": "^3.8.3",
