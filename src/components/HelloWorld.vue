@@ -1,32 +1,30 @@
 <template>
-  <div class="appaint" style="border:solid black 2px; width:950px; background-color:#404340 ;">
+  <div class="appaint" style="border:solid black 2px; width:1130px; background-color:#404340 ;">
+    <div class="header">
   <div class="operations" >
-    <button>open <i class="fa-solid fa-folder-open"></i></button>
-    <button>Save <i class="fa-solid fa-floppy-disk"></i></button>
-    <button>Undo <i class="fa-solid fa-arrow-rotate-left"></i></button>
-    <button>Redo <i class="fa-solid fa-rotate-right"></i></button>
-    <button @click="del()">Delete <i class="fa-solid fa-eraser"></i></button>
-    <button @click="clr()">clear <i class="fa-solid fa-trash"></i></button>
-    <button @click="move()">move <i class="fas fa-arrows-alt move-icon"></i></button>
-    <button>copy <i class="fa-solid fa-copy"></i></button>
+    <button style="background-color:rgb(111, 125, 131)">open <i class="fa-solid fa-folder-open"></i></button>
+    <button style="background-color:rgb(111, 125, 131)">Save <i class="fa-solid fa-floppy-disk"></i></button>
+    <button style="background-color:rgb(111, 125, 131)">Undo <i class="fa-solid fa-arrow-rotate-left"></i></button>
+    <button style="background-color:rgb(111, 125, 131)">Redo <i class="fa-solid fa-rotate-right"></i></button>
+    <button  style="background-color:rgb(111, 125, 131)" @click="del()">Delete <i class="fa-solid fa-eraser"></i></button>
+    <button style="background-color:rgb(111, 125, 131)"  @click="clr()">clear <i class="fa-solid fa-trash"></i></button>
+    <button style="background-color:rgb(111, 125, 131)" >copy <i class="fa-solid fa-copy"></i></button>
   </div>
+  <div class="clorfil" >
+    <div class="block">
+      <div class="fillcolor">
+        <color-picker v-model:pureColor="pureColor" v-model:gradientColor="gradientColor"/>
+    </div>
+      <button @click="fill()" style="background-color:rgb(111, 125, 131)">fill<i class="fa-solid fa-fill-drip"></i></button>
+      <button @click="edge()" style="background-color:rgb(111, 125, 131)">border<i class="fa-solid fa-paintbrush"></i></button>
+    
+  </div>
+  </div>
+</div>
+ 
   <div class="paint">
     <div class="bordshaps" >
     <div class="shaps">
-      <div class="color" >
-        <div class="block">
-        <div class="fillcolor" >
-        <color-picker  v-model:pureColor="pureColor" v-model:gradientColor="gradientColor"/>
-      </div>
-      <label>fill color</label>
-      </div>
-      <div class="block">
-      <div class="fillcolor" >
-        <color-picker v-model:pureColor="pureColor" v-model:gradientColor="gradientColor"/>
-      </div>
-      <label >edge color</label>
-    </div>
-      </div>
       <div class="block">
      <button @click="square()" ><div class="square"></div></button>
      <label >square</label>
@@ -65,14 +63,13 @@
           y: rect.y,
           width: rect.width,
           height: rect.height,
-          fill: 'blue',
-          stroke: 'black',
+          fill: selectedColor, // Use the selected fill color
+          stroke: pureColor2, // Use the selected edge color
           strokeWidth: 2 ,
+          draggable:true,
        }"
-        @click="shapeClicked('rect', index)"
-      >
-
-     </v-rect>
+        @click="shapeClicked('rect', index) "
+      ></v-rect>
      <!-- drawing circles -->
      <v-circle
       v-for="(circle, index) in circles"
@@ -81,9 +78,10 @@
           x: circle.x,
           y: circle.y,
           radius:circle.radius,
-          fill: 'blue',
-          stroke: 'black',
+          fill:selectedColor2, // Use the selected fill color
+          stroke: pureColor2, // Use the selected edge color
           strokeWidth: 2,
+          draggable:true,
         }"
          @click="shapeClicked('circle', index)"
      >
@@ -98,9 +96,10 @@
           y: ellipse.y,
           radiusX:ellipse.radiusX,
           radiusY:ellipse.radiusY,
-          fill: 'red',
-          stroke: 'black',
+          fill: selectedColor3, // Use the selected fill color
+          stroke: pureColor2, // Use the selected edge color
           strokeWidth: 2,
+          draggable:true,
         }"
        @click="shapeClicked('ellipse', index)"
      >
@@ -114,6 +113,7 @@
           points:line.points,
           stroke: 'black',
           strokeWidth: 2,
+          draggable:true,
         }"
          @click="shapeClicked('line', index)"
      >
@@ -128,9 +128,10 @@
           y: square.y,
           sides:4,
           radius:square.radius,
-          fill: 'blue',
-          stroke: 'black',
+          fill: selectedColor4, // Use the selected fill color
+          stroke: pureColor2, // Use the selected edge color
           strokeWidth: 2,
+          draggable:true,
         }"
       @click="shapeClicked('square', index)"
   >
@@ -144,9 +145,10 @@
           y: triangle.y,
           sides:3,
           radius:triangle.radius,
-          fill: 'red',
-          stroke: 'black',
+          fill: selectedColor5, 
+          strok:'black', 
           strokeWidth: 2,
+          draggable:true,
         }"
       @click="shapeClicked('triangle', index)"
   >
@@ -171,11 +173,17 @@ export default {
   data() {
     return {
       value: null,
-      colorFill: null,
+      selectedColor: '',
+      selectedColor2: '',
+      selectedColor3: '',
+      selectedColor4: '',
+      selectedColor5: '',
       configKonva: {
-        width: 800,
-        height: 600,
+        width: 1000,
+        height: 800,
       },
+      pureColor: '#ffffff', // Selected fill color
+      pureColor2: '#000000', // Selected edge color
       isdraw: false,
       rectangles:[],
       squares:[],
@@ -191,13 +199,16 @@ export default {
       tria:false,
       delete:false,
       mov:false,
+      cofill:false,
+      coledge:false,
       currentShape:null,
+    
     };
   },
   methods: {
     setup() {
       const pureColor = ref<ColorInputWithoutInstance>("red");
-      return { pureColor };
+      return{pureColor}
     },
     rect(){
       this.rectangle=true;
@@ -223,6 +234,12 @@ export default {
     {
         this.tria=true;
     },
+    fill(){
+      this.cofill=true;
+    },
+    edge(){
+      this.coledge=true;
+    },
     clr()
     {
       this.circles=[];
@@ -234,7 +251,7 @@ export default {
     
     },
      shapeClicked(type, index) {
-     if(type==='triangle')
+      if(type==='triangle')
      {
         if(this.delete)
         {
@@ -242,12 +259,14 @@ export default {
               this.triangles.splice(index,1);
               this.delete=false;
         }
-        if(this.mov)
-        {
-          this.triangles[index].draggable=true;
-         
-        }
-       
+        if (this.cofill) {
+        const selectedFillColor = this.pureColor; // Store the selected fill color in a variable
+        this.selectedColor5= selectedFillColor
+        this.triangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        this.cofill = false;
+        this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
+       }
+        
      }
      else if(type==='circle')
      {
@@ -257,6 +276,15 @@ export default {
               this.circles.splice(index,1);
                 this.delete=false;
         }
+        if (this.cofill) {
+        let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
+        this.selectedColor2= selectedFillColor
+        this.circles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        selectedFillColor=this.pureColor
+        this.cofill = false;
+        this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
+        
+                 }
        
      }
      else if(type==='line')
@@ -277,6 +305,18 @@ export default {
               this.rectangles.splice(index,1);
                 this.delete=false;
         }
+        if (this.cofill) {
+        let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
+        this.selectedColor= selectedFillColor
+        this.rectangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        selectedFillColor=this.pureColor
+        this.cofill = false;
+        this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
+        
+                 }
+        if(this.coledge){
+          this.rectangles[index].stroke = this.pureColor2;
+            this.coledge=false;
        
      }
      else if(type==='ellipse')
@@ -287,20 +327,43 @@ export default {
               this.ellipses.splice(index,1);
                 this.delete=false;
         }
+        if (this.cofill) {
+        let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
+        this.selectedColor3= selectedFillColor
+        this.ellipses[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        selectedFillColor=this.pureColor
+        this.cofill = false;
+        this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
+        
+                 }
+        if(this.coledge){
+            this.ellipses[index].stroke = this.pureColor2;
+            this.coledge=false;
+          }
        
      }
      else if(type==='square')
      {
+      this.squares[index].fill = this.selectedColor;
                if(this.delete)
         {
          
               this.squares.splice(index,1);
                 this.delete=false;
         }
+        if (this.cofill) {
+        const selectedFillColor = this.pureColor; // Store the selected fill color in a variable
+        this.selectedColor4= selectedFillColor
+        this.squares[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        this.cofill = false;
+        this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
+        
+                 }
        
      }
 
-    },
+    }
+  },
 
     del()
     {
@@ -310,6 +373,7 @@ export default {
     {
       this.mov=true;
     },
+    
     
       startDrawing() {
      if(this.rectangle===true)
@@ -337,7 +401,7 @@ export default {
           this.currentShape = {
             x: position.x,
             y: position.y,
-           radius: 0,
+            radius: 0,
           };
         }
       }
@@ -381,6 +445,8 @@ export default {
               this.currentShape = {
                 x: position.x,
                 y: position.y,
+                fill:'red',
+                stroke:'green',
                 radius:0
               };
             }
@@ -396,7 +462,7 @@ export default {
               this.currentShape = {
                 x: position.x,
                 y: position.y,
-                radius:0
+               radius:0
               };
             }
           }
@@ -543,6 +609,12 @@ export default {
   justify-items: center;
   
 }
+.header{
+  display: flex;
+  flex-direction: row;
+  gap:0px;
+
+}
 .operations{
   width:600px;
   border: #555 solid  ;
@@ -558,8 +630,17 @@ export default {
   justify-items: center;
 
 }
+.clorfil{
+  margin-right: 30px;
+  width:180px;
+  border: rgb(7, 5, 5) solid  ;
+  border-color: #555;
+  background-color: rgb(111, 125, 131);
+  border-radius:20px;
+  
+}
 .bordshaps{
-  height: 250px;
+  height: 180px;
   margin: 3px;
   padding-left: 1px;
   padding-right: 1px;
@@ -575,6 +656,7 @@ export default {
   gap: 5px;
   
 }
+
 .shaps{
   margin-right: 3px;
   display: flex;
