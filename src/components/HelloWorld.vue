@@ -146,7 +146,7 @@
           sides:3,
           radius:triangle.radius,
           fill: triangle.fill, 
-          strok: triangle.stroke, 
+          stroke: triangle.stroke, 
           strokeWidth: 2,
           draggable:true,
         }"
@@ -212,27 +212,56 @@ export default {
     },
     rect(){
       this.rectangle=true;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=false;
     },
     ellipse()
     {
+       this.rectangle=false;
+       this.circ=false;
       this.ellips=true;
-    },
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=false;
+    }, 
     circle()
     {
-      this.circ=true;
+     this.rectangle=false;
+       this.circ=true;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=false;
     },
     line()
     {
-         this.lin=true;
+         this.rectangle=false;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=true;
+      this.sqrt=false;
+      this.tria=false;
     },
     square()
     {
-      
-         this.sqrt=true;
+      this.rectangle=false;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=true;
+      this.tria=false;
     },
     triangle()
     {
-        this.tria=true;
+        this.rectangle=false;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=true;
     },
     fill(){
       this.cofill=true;
@@ -268,6 +297,14 @@ export default {
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
                  }
+             if(this.coledge){
+              let selectedEdgeColor = this.pureColor; // Use the selected edge color
+          this.triangles[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.coledge = false;
+          this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
+                
+       
+          }     
        
        /*********************************************************************** */
         
@@ -288,6 +325,15 @@ export default {
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
                  }
+                if(this.coledge){
+             let selectedEdgeColor = this.pureColor; // Use the selected edge color
+          this.circles[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.coledge = false;
+          this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
+                
+        
+       
+     }  
        
      }
      else if(type==='line')
@@ -298,7 +344,13 @@ export default {
               this.lines.splice(index,1);
                 this.delete=false;
         }
-       
+        if(this.coledge){
+             let selectedEdgeColor = this.pureColor; // Use the selected edge color
+          this.lines[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.coledge = false;
+          this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
+                
+        }
      }
      /************************************************************ */
      else if(type==='rect')
@@ -312,15 +364,20 @@ export default {
         if (this.cofill) {
         let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.rectangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
-        selectedFillColor=this.pureColor
+        //selectedFillColor=this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
                  }
         if(this.coledge){
-          this.rectangles[index].stroke = this.pureColor2;
-            this.coledge=false;
+             let selectedEdgeColor = this.pureColor; // Use the selected edge color
+          this.rectangles[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.coledge = false;
+          this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
+                
+        
        
+     }
      }
      /*************************************************************** */
       else if(type==='ellipse') {
@@ -330,17 +387,19 @@ export default {
               this.ellipses.splice(index,1);
                 this.delete=false;
         }
-        if (this.cofill) {
-        let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.ellipses[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
-        selectedFillColor=this.pureColor
-        this.cofill = false;
-        this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
-        
-                 }
+          if (this.cofill) {
+      let selectedFillColor = this.pureColor;
+      this.ellipses[index].fill = selectedFillColor;
+      this.cofill = false;
+      this.pureColor = '#ffffff';
+    }
+
         if(this.coledge){
-          this.ellipses[index].stroke = this.pureColor2;
-            this.coledge=false;
+           let selectedEdgeColor = this.pureColor; // Use the selected edge color
+          this.ellipses[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.coledge = false;
+          this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
+                
        
      }
         }
@@ -363,12 +422,20 @@ export default {
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
                  }
+        if(this.coledge)
+        {
+                  let selectedEdgeColor = this.pureColor; // Use the selected edge color
+          this.squares[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.coledge = false;
+          this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
+                
+        }         
        
        
      }
 
-    }
-  },
+    },
+ 
 
     del()
     {
@@ -610,7 +677,7 @@ export default {
       }
     
     },
-  },
+  }  ,
 };
 </script>
 
