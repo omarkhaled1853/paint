@@ -63,8 +63,8 @@
           y: rect.y,
           width: rect.width,
           height: rect.height,
-          fill: selectedColor, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          fill: rect.fill, // Use the selected fill color
+          stroke: rect.stroke, // Use the selected edge color
           strokeWidth: 2 ,
           draggable:true,
        }"
@@ -78,8 +78,8 @@
           x: circle.x,
           y: circle.y,
           radius:circle.radius,
-          fill:selectedColor2, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          fill:circle.fill,
+          stroke:circle.stroke,
           strokeWidth: 2,
           draggable:true,
         }"
@@ -96,8 +96,8 @@
           y: ellipse.y,
           radiusX:ellipse.radiusX,
           radiusY:ellipse.radiusY,
-          fill: selectedColor3, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          fill: ellipse.fill, // Use the selected fill color
+          stroke: ellipse.stroke, // Use the selected edge color
           strokeWidth: 2,
           draggable:true,
         }"
@@ -111,7 +111,7 @@
         :key="index"
         :config="{
           points:line.points,
-          stroke: 'black',
+          stroke: line.stroke,
           strokeWidth: 2,
           draggable:true,
         }"
@@ -128,8 +128,8 @@
           y: square.y,
           sides:4,
           radius:square.radius,
-          fill: selectedColor4, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          fill: square.fill, // Use the selected fill color
+          stroke: square.stroke, // Use the selected edge color
           strokeWidth: 2,
           draggable:true,
         }"
@@ -145,8 +145,8 @@
           y: triangle.y,
           sides:3,
           radius:triangle.radius,
-          fill: selectedColor5, 
-          strok:'black', 
+          fill: triangle.fill, 
+          strok: triangle.stroke, 
           strokeWidth: 2,
           draggable:true,
         }"
@@ -255,17 +255,21 @@ export default {
      {
         if(this.delete)
         {
-         
               this.triangles.splice(index,1);
               this.delete=false;
         }
-        if (this.cofill) {
-        const selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor5= selectedFillColor
+
+       if (this.cofill) {
+        let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
+        this.selectedColor2= selectedFillColor
         this.triangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        selectedFillColor=this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
-       }
+        
+                 }
+       
+       /*********************************************************************** */
         
      }
      else if(type==='circle')
@@ -278,7 +282,6 @@ export default {
         }
         if (this.cofill) {
         let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor2= selectedFillColor
         this.circles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
         this.cofill = false;
@@ -297,6 +300,7 @@ export default {
         }
        
      }
+     /************************************************************ */
      else if(type==='rect')
      {
              if(this.delete)
@@ -307,7 +311,6 @@ export default {
         }
         if (this.cofill) {
         let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor= selectedFillColor
         this.rectangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
         this.cofill = false;
@@ -319,9 +322,9 @@ export default {
             this.coledge=false;
        
      }
-     else if(type==='ellipse')
-     {
-             if(this.delete)
+     /*************************************************************** */
+      else if(type==='ellipse') {
+                if(this.delete)
         {
          
               this.ellipses.splice(index,1);
@@ -329,7 +332,6 @@ export default {
         }
         if (this.cofill) {
         let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor3= selectedFillColor
         this.ellipses[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
         this.cofill = false;
@@ -337,28 +339,31 @@ export default {
         
                  }
         if(this.coledge){
-            this.ellipses[index].stroke = this.pureColor2;
+          this.ellipses[index].stroke = this.pureColor2;
             this.coledge=false;
-          }
        
      }
+        }
+        /**************************************************** */
      else if(type==='square')
      {
-      this.squares[index].fill = this.selectedColor;
+     // this.squares[index].fill = this.selectedColor;
                if(this.delete)
         {
          
               this.squares.splice(index,1);
                 this.delete=false;
         }
-        if (this.cofill) {
-        const selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor4= selectedFillColor
+      if (this.cofill) {
+        let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
+        this.selectedColor2= selectedFillColor
         this.squares[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        selectedFillColor=this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
                  }
+       
        
      }
 
@@ -386,6 +391,8 @@ export default {
           this.currentShape = {
             x: position.x,
             y: position.y,
+             fill:this.pureColor,
+            stroke:this.pureColor2,
             width: 0,
             height: 0,
           };
@@ -401,6 +408,8 @@ export default {
           this.currentShape = {
             x: position.x,
             y: position.y,
+            fill:this.pureColor,
+            stroke:this.pureColor2,
             radius: 0,
           };
         }
@@ -416,6 +425,8 @@ export default {
               this.currentShape = {
                 x: position.x,
                 y: position.y,
+                 fill:this.pureColor,
+            stroke:this.pureColor2,
               radiusX: 0,
               radiusY:0
               };
@@ -430,6 +441,8 @@ export default {
             const position = stage.getPointerPosition();
             if (position) {
               this.currentShape = {
+                
+            stroke:this.pureColor2,
              points: [position.x, position.y]
               };
             }
@@ -445,8 +458,8 @@ export default {
               this.currentShape = {
                 x: position.x,
                 y: position.y,
-                fill:'red',
-                stroke:'green',
+                fill:this.pureColor,
+            stroke:this.pureColor2,
                 radius:0
               };
             }
@@ -460,9 +473,11 @@ export default {
             const position = stage.getPointerPosition();
             if (position) {
               this.currentShape = {
-                x: position.x,
+               x: position.x,
                 y: position.y,
-               radius:0
+                fill:this.pureColor,
+            stroke:this.pureColor2,
+                radius:0
               };
             }
           }
@@ -476,6 +491,7 @@ export default {
      
           if (this.isdraw) {
         this.isdraw = false;
+        console.log("xxxxx");
         if(this.circ)
         this.circles.push({ ...this.currentShape });
       else if(this.rectangle)
