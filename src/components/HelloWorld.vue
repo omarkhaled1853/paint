@@ -64,7 +64,7 @@
           width: rect.width,
           height: rect.height,
           fill: selectedColor, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          stroke: selectedColor, // Use the selected edge color
           strokeWidth: 2 ,
           draggable:true,
        }"
@@ -79,7 +79,7 @@
           y: circle.y,
           radius:circle.radius,
           fill:selectedColor2, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          stroke: selectedColor9, // Use the selected edge color
           strokeWidth: 2,
           draggable:true,
         }"
@@ -97,7 +97,7 @@
           radiusX:ellipse.radiusX,
           radiusY:ellipse.radiusY,
           fill: selectedColor3, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          stroke: selectedColor6, // Use the selected edge color
           strokeWidth: 2,
           draggable:true,
         }"
@@ -129,7 +129,7 @@
           sides:4,
           radius:square.radius,
           fill: selectedColor4, // Use the selected fill color
-          stroke: pureColor2, // Use the selected edge color
+          stroke: selectedColor8, // Use the selected edge color
           strokeWidth: 2,
           draggable:true,
         }"
@@ -146,7 +146,7 @@
           sides:3,
           radius:triangle.radius,
           fill: selectedColor5, 
-          strok:'black', 
+          strok:selectedColor10, 
           strokeWidth: 2,
           draggable:true,
         }"
@@ -176,8 +176,12 @@ export default {
       selectedColor: '',
       selectedColor2: '',
       selectedColor3: '',
-      selectedColor4: '',
-      selectedColor5: '',
+      selectedColor4: 'white',
+      selectedColor5: 'white',
+      selectedColor9: 'black',
+      selectedColor6: 'black',
+      selectedColor8: 'black',
+      selectedColor1: 'black',
       configKonva: {
         width: 1000,
         height: 800,
@@ -260,12 +264,17 @@ export default {
               this.delete=false;
         }
         if (this.cofill) {
-        const selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor5= selectedFillColor
-        this.triangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        this.selectedColor5= this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
        }
+       if(this.coledge){
+          this.triangles[index].stroke = this.pureColor;
+          this.selectedColor10= this.pureColor;
+            this.coledge=false;
+            this.pureColor = '#ffffff';
+       
+            }
         
      }
      else if(type==='circle')
@@ -285,6 +294,13 @@ export default {
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
                  }
+        if(this.coledge){
+          this.circles[index].stroke = this.pureColor;
+          this.selectedColor9= this.pureColor;
+            this.coledge=false;
+            this.pureColor = '#ffffff';
+       
+            }
        
      }
      else if(type==='line')
@@ -295,6 +311,11 @@ export default {
               this.lines.splice(index,1);
                 this.delete=false;
         }
+        if(this.coledge){
+          this.lines[index].stroke = this.pureColor;
+            this.coledge=false;
+       
+            }
        
      }
      else if(type==='rect')
@@ -315,10 +336,13 @@ export default {
         
                  }
         if(this.coledge){
-          this.rectangles[index].stroke = this.pureColor2;
+          this.rectangles[index].stroke = this.pureColor;
+          this.selectedColor1=this.pureColor;
             this.coledge=false;
+            this.pureColor = '#ffffff';
        
-     }
+            }
+    }
      else if(type==='ellipse')
      {
              if(this.delete)
@@ -328,23 +352,21 @@ export default {
                 this.delete=false;
         }
         if (this.cofill) {
-        let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor3= selectedFillColor
-        this.ellipses[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
-        selectedFillColor=this.pureColor
+        this.selectedColor3= this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
                  }
         if(this.coledge){
-            this.ellipses[index].stroke = this.pureColor2;
+            this.ellipses[index].stroke = this.pureColor;
+            this.selectedColor6= this.pureColor
             this.coledge=false;
+            this.pureColor = '#ffffff';
           }
        
      }
      else if(type==='square')
      {
-      this.squares[index].fill = this.selectedColor;
                if(this.delete)
         {
          
@@ -352,17 +374,19 @@ export default {
                 this.delete=false;
         }
         if (this.cofill) {
-        const selectedFillColor = this.pureColor; // Store the selected fill color in a variable
-        this.selectedColor4= selectedFillColor
-        this.squares[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        this.selectedColor4= this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
-        
-                 }
+        }
+        if(this.coledge){
+            this.squares[index].stroke = this.pureColor;
+            this.selectedColor8= this.pureColor
+            this.coledge=false;
+            this.pureColor = '#ffffff';
+          }
        
      }
 
-    }
   },
 
     del()
