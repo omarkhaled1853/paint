@@ -1,6 +1,5 @@
 public interface Shape{
-
-    Shape clone();
+    Shape Clone();
 }
 abstract class MainProperties implements Shape{
     private double x;
@@ -52,30 +51,42 @@ abstract class MainProperties implements Shape{
 
 class Line extends MainProperties{
 
-    private double rotation;
+    private double x2;
+    private double y2;
+
+    public double getX2() {
+        return x2;
+    }
+
+    public void setX2(double x2) {
+        this.x2 = x2;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
+    public void setY2(double y2) {
+        this.y2 = y2;
+    }
+
     @Override
-    public Shape clone(){
+    public Shape Clone(){
         Line copy = new Line();
         copy.setX(this.getX());
         copy.setY(this.getY());
+        copy.setX2(this.getX2());
+        copy.setY2(this.getY2());
         copy.setStroke(this.getStroke());
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
-        copy.setRotation(this.getRotation());
         return copy;
-    }
-    public double getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
     }
 }
 class Circle extends MainProperties{
     private double radius;
     @Override
-    public Shape clone(){
+    public Shape Clone(){
         Circle copy = new Circle();
         copy.setX(this.getX());
         copy.setY(this.getY());
@@ -98,7 +109,7 @@ class Ellipse extends MainProperties{
     private double radiusX;
     private double radiusY;
     @Override
-    public Shape clone(){
+    public Shape Clone(){
         Ellipse copy = new Ellipse();
         copy.setX(this.getX());
         copy.setY(this.getY());
@@ -127,36 +138,37 @@ class Ellipse extends MainProperties{
     }
 }
 class Triangle extends MainProperties{
-    private double rotation;
+    private double radius;
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
 
     @Override
-    public Shape clone(){
+    public Shape Clone(){
         Triangle copy = new Triangle();
         copy.setX(this.getX());
         copy.setY(this.getY());
         copy.setStroke(this.getStroke());
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
-        copy.setRotation(this.getRotation());
+        copy.setRadius(this.getRadius());
+
         return copy;
     }
 
-    public double getRotation() {
-        return rotation;
-    }
 
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
 }
 class Rectangle extends MainProperties{
     private double height;
     private double width;
-    private double rotation;
-    private double cornerRadius;
 
     @Override
-    public Shape clone() {
+    public Shape Clone() {
         Rectangle copy = new Rectangle();
         copy.setX(this.getX());
         copy.setY(this.getY());
@@ -165,8 +177,6 @@ class Rectangle extends MainProperties{
         copy.setFill(this.getFill());
         copy.setHeight(this.getHeight());
         copy.setWidth(this.getWidth());
-        copy.setRotation(this.getRotation());
-        copy.setCornerRadius(this.getCornerRadius());
         return copy;
     }
 
@@ -186,20 +196,27 @@ class Rectangle extends MainProperties{
         this.width = width;
     }
 
-    public double getRotation() {
-        return rotation;
+}
+class Square extends MainProperties{
+    private double radius;
+    public double getRadius() {
+        return radius;
     }
 
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 
-    public double getCornerRadius() {
-        return cornerRadius;
-    }
-
-    public void setCornerRadius(double cornerRadius) {
-        this.cornerRadius = cornerRadius;
+    @Override
+    public Shape Clone() {
+        Square copy = new Square();
+        copy.setX(this.getX());
+        copy.setY(this.getY());
+        copy.setStroke(this.getStroke());
+        copy.setStrokeWidth(this.getStrokeWidth());
+        copy.setFill(this.getFill());
+        copy.setRadius(this.getRadius());
+        return copy;
     }
 }
 class ShapeFactory{
@@ -219,8 +236,11 @@ class ShapeFactory{
             case "Triangle" -> {
                 return new Triangle();
             }
-            case "Rectangle", "Square" -> {
+            case "Rectangle"-> {
                 return new Rectangle();
+            }
+            case "Square" -> {
+                return new Square();
             }
             default -> throw new RuntimeException();
         }
