@@ -52,29 +52,38 @@
     </div>
   </div>
     <div class="bord" style="border: solid black 2px; border-radius: 10px; background-color:#ffffff;margin-left:2px ">
-  <v-stage :config="configKonva" ref="stage" @mousedown="startDrawing" @mouseup="stopDrawing" @mousemove="draw" >
+  <v-stage :config="configKonva" ref="stage" @mousedown="startDrawing" @mouseup="stopDrawing" @mousemove="draw" 
+     >
     <v-layer>
       <!-- drawing rectangles -->
       <v-rect
        v-for="(rect, index) in rectangles"
         :key="index"
-        :config="{
-          x: rect.x,
+        :config="{ 
+          type:'rectangle',
+          x:  rect.x,
           y: rect.y,
+          name:index,
           width: rect.width,
           height: rect.height,
           fill: rect.fill, // Use the selected fill color
           stroke: rect.stroke, // Use the selected edge color
           strokeWidth: 2 ,
           draggable:true,
+           
        }"
+         
         @click="shapeClicked('rect', index) "
+       @dragend="newpo('rect', index, $event)"   
+      
+        
       ></v-rect>
      <!-- drawing circles -->
      <v-circle
       v-for="(circle, index) in circles"
         :key="index"
         :config="{
+          type:'circle',
           x: circle.x,
           y: circle.y,
           radius:circle.radius,
@@ -84,7 +93,7 @@
           draggable:true,
         }"
          @click="shapeClicked('circle', index)"
-     >
+         @dragend="newpo('circle', index, $event)"     >
 
      </v-circle>
      <!-- drawing ellipses -->
@@ -92,6 +101,7 @@
         v-for="(ellipse, index) in ellipses"
         :key="index"
         :config="{
+          type:'ellipse',
           x: ellipse.x,
           y: ellipse.y,
           radiusX:ellipse.radiusX,
@@ -102,6 +112,7 @@
           draggable:true,
         }"
        @click="shapeClicked('ellipse', index)"
+       @dragend="newpo('ellipse', index, $event)"   
      >
 
      </v-ellipse>
@@ -110,37 +121,42 @@
        v-for="(line, index) in lines"
         :key="index"
         :config="{
+          type:'line',
           points:line.points,
           stroke: line.stroke,
           strokeWidth: 2,
           draggable:true,
         }"
          @click="shapeClicked('line', index)"
+         @dragend="newpo('line', index, $event)"   
      >
 
      </v-line>
   <!-- square -->
-  <v-regular-polygon
+  <v-rect
    v-for="(square, index) in squares"
         :key="index"
         :config="{
-          x: square.x,
+          type:'square',
+           x: square.x,
           y: square.y,
-          sides:4,
-          radius:square.radius,
+          width: square.width,
+          height: square.height,
           fill: square.fill, // Use the selected fill color
           stroke: square.stroke, // Use the selected edge color
-          strokeWidth: 2,
+          strokeWidth: 2 ,
           draggable:true,
         }"
       @click="shapeClicked('square', index)"
+      @dragend="newpo('square', index, $event)"   
   >
 
-  </v-regular-polygon>
+  </v-rect>
   <v-regular-polygon
    v-for="(triangle, index) in triangles"
         :key="index"
         :config="{
+          type:'triangle',
           x: triangle.x,
           y: triangle.y,
           sides:3,
@@ -151,10 +167,11 @@
           draggable:true,
         }"
       @click="shapeClicked('triangle', index)"
+      @dragend="newpo('triangle', index, $event)"   
   >
 
   </v-regular-polygon>
-  
+      <v-transformer ref="transformer" />
 
     </v-layer>
   </v-stage>
@@ -165,10 +182,12 @@
 </template>
 
 <script>
+//import Konva from 'konva';
+
 import { ref } from "vue";
 import { ColorInputWithoutInstance } from "tinycolor2";
 
-export default {
+export default  {
   name: 'HelloWorld',
   data() {
     return {
@@ -197,11 +216,14 @@ export default {
       lin:false,
       sqrt:false,
       tria:false,
+      bru:false,
       delete:false,
       mov:false,
       cofill:false,
       coledge:false,
       currentShape:null,
+      shapes:[],
+      selectedShapeName: '',
     
     };
   },
@@ -210,64 +232,162 @@ export default {
       const pureColor = ref<ColorInputWithoutInstance>("red");
       return{pureColor}
     },
+    
+newpo(type, index,e) {
+  if (type === 'circle') {
+    this.circles[index].x=e.target.x();
+    this.circles[index].y=e.target.y();
+    console.log(this.circles[index].x);
+    console.log(this.circles[index].y);
+    }
+    if (type === 'rect') {
+    this.rectangles[index].x=e.target.x();
+    this.rectangles[index].y=e.target.y();
+    console.log(this.rectangles[index].x);
+    console.log(this.rectangles[index].y);
+    }
+    if (type === 'ellipse') {
+    this.ellipses[index].x=e.target.x();
+    this.ellipses[index].y=e.target.y();
+    console.log(this.ellipses[index].x);
+    console.log(this.ellipses[index].y);
+    }
+    if (type === 'line') {
+    this.lines[index].x=e.target.x();
+    this.lines[index].y=e.target.y();
+    console.log(this.lines[index].x);
+    console.log(this.lines[index].y);
+    }
+    if (type === 'square') {
+    this.squares[index].x=e.target.x();
+    this.squares[index].y=e.target.y();
+    console.log(this.squares[index].x);
+    console.log(this.squares[index].y);
+    }
+    if (type === 'triangle') {
+    this.triangles[index].x=e.target.x();
+    this.triangles[index].y=e.target.y();
+    console.log(this.triangles[index].x);
+    console.log(this.triangles[index].y);
+    }
+    
+  },
+
     rect(){
-      this.rectangle=true;
+         this.rectangle=true;
        this.circ=false;
       this.ellips=false;
       this.lin=false;
       this.sqrt=false;
       this.tria=false;
+      this.cofill=false;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=false;
+    },
+    brush(){
+           this.rectangle=false;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=false;
+      this.cofill=false;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=true;
     },
     ellipse()
     {
-       this.rectangle=false;
+          this.rectangle=false;
        this.circ=false;
       this.ellips=true;
       this.lin=false;
       this.sqrt=false;
       this.tria=false;
+      this.cofill=false;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=false;
     }, 
     circle()
     {
-     this.rectangle=false;
+         this.rectangle=false;
        this.circ=true;
       this.ellips=false;
       this.lin=false;
       this.sqrt=false;
       this.tria=false;
+      this.cofill=false;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=false;
     },
     line()
     {
-         this.rectangle=false;
+           this.rectangle=false;
        this.circ=false;
       this.ellips=false;
       this.lin=true;
       this.sqrt=false;
       this.tria=false;
+      this.cofill=false;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=false;
     },
     square()
     {
-      this.rectangle=false;
+
+          this.rectangle=false;
        this.circ=false;
       this.ellips=false;
       this.lin=false;
       this.sqrt=true;
       this.tria=false;
+      this.cofill=false;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=false;
     },
     triangle()
     {
-        this.rectangle=false;
+          this.rectangle=false;
        this.circ=false;
       this.ellips=false;
       this.lin=false;
       this.sqrt=false;
       this.tria=true;
+      this.cofill=false;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=false;
     },
     fill(){
+
+          this.rectangle=false;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=false;
       this.cofill=true;
+      this.delete=false;
+      this.coledge=false;
+      this.bru=false;
     },
     edge(){
+        this.rectangle=false;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=false;
+      this.cofill=false;
+      this.delete=false;
       this.coledge=true;
+      this.bru=false;
+
     },
     clr()
     {
@@ -279,6 +399,7 @@ export default {
       this.ellipses=[];
     
     },
+   
      shapeClicked(type, index) {
       if(type==='triangle')
      {
@@ -304,7 +425,7 @@ export default {
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                 
        
-          }     
+          }
        
        /*********************************************************************** */
         
@@ -318,12 +439,14 @@ export default {
                 this.delete=false;
         }
         if (this.cofill) {
+
         let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.circles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
-        
+           
+              
                  }
                 if(this.coledge){
              let selectedEdgeColor = this.pureColor; // Use the selected edge color
@@ -439,7 +562,16 @@ export default {
 
     del()
     {
-          this.delete=true;
+              this.rectangle=false;
+       this.circ=false;
+      this.ellips=false;
+      this.lin=false;
+      this.sqrt=false;
+      this.tria=false;
+      this.cofill=false;
+      this.delete=true;
+      this.coledge=false;
+      this.bru=false;
     },
     move()
     {
@@ -463,6 +595,8 @@ export default {
             width: 0,
             height: 0,
           };
+          console.log(this.currentShape.x);
+          console.log(this.currentShape.y);
         }
       }
       }
@@ -523,11 +657,12 @@ export default {
             const position = stage.getPointerPosition();
             if (position) {
               this.currentShape = {
-                x: position.x,
-                y: position.y,
-                fill:this.pureColor,
+              x: position.x,
+            y: position.y,
+             fill:this.pureColor,
             stroke:this.pureColor2,
-                radius:0
+            width: 0,
+            height: 0,
               };
             }
           }
@@ -549,6 +684,23 @@ export default {
             }
           }
       }
+      /*
+      else if(this.bru)
+      {
+            this.isdraw = true;
+          const stage = this.$refs.stage.getStage();
+          if (stage) {
+            const position = stage.getPointerPosition();
+            if (position) {
+              this.currentShape = {
+                
+            stroke:this.pureColor2,
+             points: [position.x, position.y]
+              };
+            }
+          }
+      }
+      */
   
      
       
@@ -560,12 +712,19 @@ export default {
         this.isdraw = false;
         console.log("xxxxx");
         if(this.circ)
-        this.circles.push({ ...this.currentShape });
+        {
+                     this.circles.push({ ...this.currentShape });
+                     this.shapes.push({...this.currentShape});
+                   // while(true){
+                    console.log(this.shapes[0]);
+                   // }
+        }
+      
       else if(this.rectangle)
       this.rectangles.push({...this.currentShape});
       else if(this.ellips)
             this.ellipses.push({...this.currentShape});
-      else if(this.lin)
+      else if(this.lin||this.bru)
            this.lines.push({...this.currentShape});
       else if(this.sqrt)
            this.squares.push({...this.currentShape});
@@ -582,6 +741,7 @@ export default {
         this.sqrt=false;
         this.tria=false;
         this.mov = false;
+        this.bru=false;
       }
      
       
@@ -653,9 +813,8 @@ export default {
         if (stage) {
           const position = stage.getPointerPosition();
           if (position) {
-           
-            this.currentShape.radius=Math.sqrt(
-                Math.pow(position.x - this.currentShape.x, 2) + Math.pow(position.y - this.currentShape.y, 2));
+            this.currentShape.width = position.x - this.currentShape.x;
+            this.currentShape.height = position.x - this.currentShape.x;
           }
         }
       }
@@ -675,10 +834,11 @@ export default {
         }
       }
       }
-    
+      
     },
-  }  ,
-};
+  }
+}
+
 </script>
 
 
