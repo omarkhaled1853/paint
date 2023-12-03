@@ -1,13 +1,12 @@
-public interface Shape{
-    Shape Clone();
-}
-abstract class MainProperties implements Shape{
+public abstract class Shape {
+    abstract Shape Clone();
+    abstract String getType();
     private double x;
     private double y;
     private String fill;
     private String stroke;
     private double strokeWidth;
-
+    private long index;
     public double getX() {
         return x;
     }
@@ -47,10 +46,22 @@ abstract class MainProperties implements Shape{
     public void setStrokeWidth(double strokeWidth) {
         this.strokeWidth = strokeWidth;
     }
+    public Long getIndex() {
+        return index;
+    }
+
+    public void setIndex(long index) {
+        this.index = index;
+    }
+
 }
 
-class Line extends MainProperties{
+class Line extends Shape{
 
+    final String type = "Line";
+    String getType(){
+        return this.type;
+    }
     private double x2;
     private double y2;
 
@@ -80,10 +91,15 @@ class Line extends MainProperties{
         copy.setStroke(this.getStroke());
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
+        copy.setIndex(this.getIndex());
         return copy;
     }
 }
-class Circle extends MainProperties{
+class Circle extends Shape{
+    String getType(){
+        return this.type;
+    }
+    final String type = "Circle";
     private double radius;
     @Override
     public Shape Clone(){
@@ -94,6 +110,7 @@ class Circle extends MainProperties{
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
         copy.setRadius(this.getRadius());
+        copy.setIndex(this.getIndex());
         return copy;
     }
 
@@ -105,7 +122,11 @@ class Circle extends MainProperties{
         this.radius = radius;
     }
 }
-class Ellipse extends MainProperties{
+class Ellipse extends Shape{
+    String getType(){
+        return this.type;
+    }
+    final String type = "Ellipse";
     private double radiusX;
     private double radiusY;
     @Override
@@ -118,6 +139,7 @@ class Ellipse extends MainProperties{
         copy.setFill(this.getFill());
         copy.setRadiusX(this.getRadiusX());
         copy.setRadiusY(this.getRadiusY());
+        copy.setIndex(this.getIndex());
         return copy;
     }
 
@@ -137,7 +159,11 @@ class Ellipse extends MainProperties{
         this.radiusY = radiusY;
     }
 }
-class Triangle extends MainProperties{
+class Triangle extends Shape{
+    String getType(){
+        return this.type;
+    }
+    final String type = "Triangle";
     private double radius;
 
     public double getRadius() {
@@ -157,13 +183,17 @@ class Triangle extends MainProperties{
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
         copy.setRadius(this.getRadius());
-
+        copy.setIndex(this.getIndex());
         return copy;
     }
 
 
 }
-class Rectangle extends MainProperties{
+class Rectangle extends Shape{
+    String getType(){
+        return this.type;
+    }
+    final String type = "Rectangle";
     private double height;
     private double width;
 
@@ -177,6 +207,7 @@ class Rectangle extends MainProperties{
         copy.setFill(this.getFill());
         copy.setHeight(this.getHeight());
         copy.setWidth(this.getWidth());
+        copy.setIndex(this.getIndex());
         return copy;
     }
 
@@ -197,7 +228,11 @@ class Rectangle extends MainProperties{
     }
 
 }
-class Square extends MainProperties{
+class Square extends Shape{
+    String getType(){
+        return this.type;
+    }
+    final String type = "Square";
     private double radius;
     public double getRadius() {
         return radius;
@@ -216,6 +251,7 @@ class Square extends MainProperties{
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
         copy.setRadius(this.getRadius());
+        copy.setIndex(this.getIndex());
         return copy;
     }
 }
@@ -246,5 +282,3 @@ class ShapeFactory{
         }
     }
 }
-
-
