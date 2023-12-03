@@ -9,6 +9,10 @@
     <button  style="background-color:rgb(111, 125, 131)" @click="del()">Delete <i class="fa-solid fa-eraser"></i></button>
     <button style="background-color:rgb(111, 125, 131)"  @click="clr()">clear <i class="fa-solid fa-trash"></i></button>
     <button style="background-color:rgb(111, 125, 131)" >copy <i class="fa-solid fa-copy"></i></button>
+    <button for="userInput"  style="background-color:rgb(111, 125, 131)" @click="resize() ">resize</button>
+    <input type="text" id="userInput" style="border:solid black ;">
+    
+
   </div>
   <div class="clorfil" >
     <div class="block">
@@ -23,7 +27,9 @@
 </div>
  
   <div class="paint">
+   
     <div class="bordshaps" >
+     
     <div class="shaps">
       <div class="block">
      <button @click="square()" ><div class="square"></div></button>
@@ -224,7 +230,8 @@ export default  {
       currentShape:null,
       shapes:[],
       selectedShapeName: '',
-    
+      resiz:false,
+      userInput:0,
     };
   },
   methods: {
@@ -232,6 +239,7 @@ export default  {
       const pureColor = ref<ColorInputWithoutInstance>("red");
       return{pureColor}
     },
+    
     
 newpo(type, index,e) {
   if (type === 'circle') {
@@ -272,7 +280,6 @@ newpo(type, index,e) {
     }
     
   },
-
     rect(){
          this.rectangle=true;
        this.circ=false;
@@ -299,7 +306,7 @@ newpo(type, index,e) {
     },
     ellipse()
     {
-          this.rectangle=false;
+       this.rectangle=false;
        this.circ=false;
       this.ellips=true;
       this.lin=false;
@@ -375,6 +382,7 @@ newpo(type, index,e) {
       this.delete=false;
       this.coledge=false;
       this.bru=false;
+
     },
     edge(){
         this.rectangle=false;
@@ -399,10 +407,22 @@ newpo(type, index,e) {
       this.ellipses=[];
     
     },
-   
+    resize(){
+      this.resiz=true;
+      this.userInput = document.getElementById('userInput').value;
+
+    },
      shapeClicked(type, index) {
       if(type==='triangle')
      {
+      this.triangles[index].draggable=true;
+      if(this.resize)
+      {
+        this.triangles[index].draggable=false;
+        this.triangles[index].radius *=  this.userInput;
+        this.triangles[index].draggable=true;
+        this.resiz=false;
+      }
         if(this.delete)
         {
               this.triangles.splice(index,1);
@@ -432,6 +452,14 @@ newpo(type, index,e) {
      }
      else if(type==='circle')
      {
+      this.circles[index].draggable=true;
+      if(this.resize)
+      {
+        this.circles[index].draggable=false;
+        this.circles[index].radius *= this.userInput;
+        this.circles[index].draggable=true;
+        this.resiz=false;
+      }
           if(this.delete)
         {
          
@@ -478,6 +506,16 @@ newpo(type, index,e) {
      /************************************************************ */
      else if(type==='rect')
      {
+
+      this.rectangles[index].draggable=true;
+      if(this.resize)
+      {
+        this.rectangles[index].draggable=false;
+        this.rectangles[index].width *= this.userInput;
+        this.rectangles[index].height *= this.userInput;
+        this.rectangles[index].draggable=true;
+        this.resiz=false;
+      }
              if(this.delete)
         {
          
@@ -504,6 +542,15 @@ newpo(type, index,e) {
      }
      /*************************************************************** */
       else if(type==='ellipse') {
+        this.ellipses[index].draggable=true;
+      if(this.resize)
+      {
+        this.ellipses[index].draggable=false;
+        this.ellipses[index].radiusX *=  this.userInput;
+        this.ellipses[index].radiusY *=  this.userInput;
+        this.ellipses[index].draggable=true;
+        this.resiz=false;
+      }
                 if(this.delete)
         {
          
@@ -529,6 +576,14 @@ newpo(type, index,e) {
         /**************************************************** */
      else if(type==='square')
      {
+      this.squares[index].draggable=true;
+      if(this.resize)
+      {
+        this.squares[index].draggable=false;
+        this.squares[index].width *=  this.userInput;
+        this.squares[index].height *=  this.userInput;
+        this.squares[index].draggable=true;
+      }
      // this.squares[index].fill = this.selectedColor;
                if(this.delete)
         {
