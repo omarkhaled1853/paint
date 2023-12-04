@@ -4,6 +4,7 @@
   <div class="operations" >
     <button style="background-color:rgb(111, 125, 131)">open <i class="fa-solid fa-folder-open"></i></button>
     <button style="background-color:rgb(111, 125, 131)">Save <i class="fa-solid fa-floppy-disk"></i></button>
+    <button style="background-color:rgb(111, 125, 131)" @click="save()">Save <i class="fa-solid fa-floppy-disk"></i></button>
     <button style="background-color:rgb(111, 125, 131)">Undo <i class="fa-solid fa-arrow-rotate-left"></i></button>
     <button style="background-color:rgb(111, 125, 131)">Redo <i class="fa-solid fa-rotate-right"></i></button>
     <button  style="background-color:rgb(111, 125, 131)" @click="del()">Delete <i class="fa-solid fa-eraser"></i></button>
@@ -12,7 +13,6 @@
     <button for="userInput"  style="background-color:rgb(111, 125, 131)" @click="resize() ">resize</button>
     <input type="text" id="userInput" style="border:solid black ;">
     
-
   </div>
   <div class="clorfil" >
     <div class="block">
@@ -100,7 +100,6 @@
         }"
          @click="shapeClicked('circle', index)"
          @dragend="newpo('circle', index, $event)"     >
-
      </v-circle>
      <!-- drawing ellipses -->
      <v-ellipse
@@ -120,7 +119,6 @@
        @click="shapeClicked('ellipse', index)"
        @dragend="newpo('ellipse', index, $event)"   
      >
-
      </v-ellipse>
      <!-- drawing line segment -->
      <v-line
@@ -136,7 +134,6 @@
          @click="shapeClicked('line', index)"
          @dragend="newpo('line', index, $event)"   
      >
-
      </v-line>
   <!-- square -->
   <v-rect
@@ -156,7 +153,6 @@
       @click="shapeClicked('square', index)"
       @dragend="newpo('square', index, $event)"   
   >
-
   </v-rect>
   <v-regular-polygon
    v-for="(triangle, index) in triangles"
@@ -179,6 +175,7 @@
   </v-regular-polygon>
       <v-transformer ref="transformer" />
 
+
     </v-layer>
   </v-stage>
 </div>
@@ -186,13 +183,10 @@
 </div>
 </div>
 </template>
-
 <script>
 //import Konva from 'konva';
-
 import { ref } from "vue";
 import { ColorInputWithoutInstance } from "tinycolor2";
-
 export default  {
   name: 'HelloWorld',
   data() {
@@ -232,6 +226,8 @@ export default  {
       selectedShapeName: '',
       resiz:false,
       userInput:0,
+      sav:false,
+      path:"C:\\" 
     };
   },
   methods: {
@@ -240,41 +236,100 @@ export default  {
       return{pureColor}
     },
     
+    save()
+    {
+        this.saving();
+    },
     
 newpo(type, index,e) {
   if (type === 'circle') {
+    var v=0;
+    for(let i=0;i<this.shapes.length;i++){
+      if(this.shapes[i]===this.circles[index])
+      {
+           v=i;
+           break;
+      }
+    }
     this.circles[index].x=e.target.x();
     this.circles[index].y=e.target.y();
+    this.shapes[v]=this.circles[index];
+    console.log(this.shapes[v]);
     console.log(this.circles[index].x);
     console.log(this.circles[index].y);
     }
     if (type === 'rect') {
+      var v=0;
+    for(let i=0;i<this.shapes.length;i++){
+      if(this.shapes[i]===this.rectangles[index])
+      {
+           v=i;
+           break;
+      }
+    }
     this.rectangles[index].x=e.target.x();
     this.rectangles[index].y=e.target.y();
+    this.shapes[v]=this.rectangles[index];
     console.log(this.rectangles[index].x);
     console.log(this.rectangles[index].y);
     }
     if (type === 'ellipse') {
+    var v=0;
+    for(let i=0;i<this.shapes.length;i++){
+      if(this.shapes[i]===this.ellipses[index])
+      {
+           v=i;
+           break;
+      }
+    }
     this.ellipses[index].x=e.target.x();
     this.ellipses[index].y=e.target.y();
+    this.shapes[v]=this.ellipses[index];
     console.log(this.ellipses[index].x);
     console.log(this.ellipses[index].y);
     }
     if (type === 'line') {
+   var v=0;
+    for(let i=0;i<this.shapes.length;i++){
+      if(this.shapes[i]===this.lines[index])
+      {
+           v=i;
+           break;
+      }
+    }
     this.lines[index].x=e.target.x();
     this.lines[index].y=e.target.y();
+    this.shapes[v]=this.lines[index];
     console.log(this.lines[index].x);
     console.log(this.lines[index].y);
     }
     if (type === 'square') {
+    var v=0;
+    for(let i=0;i<this.shapes.length;i++){
+      if(this.shapes[i]===this.squares[index])
+      {
+           v=i;
+           break;
+      }
+    }
     this.squares[index].x=e.target.x();
     this.squares[index].y=e.target.y();
+    this.shapes[v]=this.squares[index];
     console.log(this.squares[index].x);
     console.log(this.squares[index].y);
     }
     if (type === 'triangle') {
+    var v=0;
+    for(let i=0;i<this.shapes.length;i++){
+      if(this.shapes[i]===this.triangles[index])
+      {
+           v=i;
+           break;
+      }
+    }
     this.triangles[index].x=e.target.x();
     this.triangles[index].y=e.target.y();
+    this.shapes[v]=this.triangles[index];
     console.log(this.triangles[index].x);
     console.log(this.triangles[index].y);
     }
@@ -345,7 +400,6 @@ newpo(type, index,e) {
     },
     square()
     {
-
           this.rectangle=false;
        this.circ=false;
       this.ellips=false;
@@ -371,7 +425,6 @@ newpo(type, index,e) {
       this.bru=false;
     },
     fill(){
-
           this.rectangle=false;
        this.circ=false;
       this.ellips=false;
@@ -382,7 +435,6 @@ newpo(type, index,e) {
       this.delete=false;
       this.coledge=false;
       this.bru=false;
-
     },
     edge(){
         this.rectangle=false;
@@ -395,7 +447,6 @@ newpo(type, index,e) {
       this.delete=false;
       this.coledge=true;
       this.bru=false;
-
     },
     clr()
     {
@@ -405,34 +456,50 @@ newpo(type, index,e) {
       this.rectangles=[];
       this.triangles=[];
       this.ellipses=[];
+      this.shapes=[];
     
     },
     resize(){
       this.resiz=true;
       this.userInput = document.getElementById('userInput').value;
-
     },
      shapeClicked(type, index) {
       if(type==='triangle')
      {
       this.triangles[index].draggable=true;
       if(this.resize)
+        let v=0;
+        for(let i=0;i<this.shapes.length;i++)
+        {
+          if(this.shapes[i]===this.triangles[index])
+          {
+            v=i;
+            break;
+          }
+        }
+      if(this.resiz)
       {
+       
         this.triangles[index].draggable=false;
         this.triangles[index].radius *=  this.userInput;
         this.triangles[index].draggable=true;
+        this.shapes[v]=this.triangles[index];
         this.resiz=false;
       }
         if(this.delete)
         {
+          
               this.triangles.splice(index,1);
+              this.shapes.splice(v,1);
+             // console.log(this.shapes);
               this.delete=false;
         }
-
        if (this.cofill) {
         let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.selectedColor2= selectedFillColor
         this.triangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        this.triangles[index].fill = selectedFillColor;
+        this.shapes[v]=this.triangles[index];       // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
@@ -441,6 +508,8 @@ newpo(type, index,e) {
              if(this.coledge){
               let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.triangles[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.triangles[index].stroke = selectedEdgeColor; 
+          this.shapes[v]=this.triangles[index]; // Assign the selected edge color to the stroke property of the shape object
           this.coledge = false;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                 
@@ -454,22 +523,35 @@ newpo(type, index,e) {
      {
       this.circles[index].draggable=true;
       if(this.resize)
+       let v=0;
+        for(let i=0;i<this.shapes.length;i++)
+        {
+          if(this.shapes[i]===this.circles[index])
+          {
+            v=i;
+            break;
+          }
+        }
+      if(this.resiz)
       {
         this.circles[index].draggable=false;
         this.circles[index].radius *= this.userInput;
         this.circles[index].draggable=true;
+        this.shapes[v]=this.circles[index];
         this.resiz=false;
       }
           if(this.delete)
         {
          
               this.circles.splice(index,1);
+              this.shapes.splice(v,1);
                 this.delete=false;
         }
         if (this.cofill) {
-
         let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.circles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
+        this.circles[index].fill = selectedFillColor; 
+           this.shapes[v]=this.circles[index];   // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
@@ -479,6 +561,8 @@ newpo(type, index,e) {
                 if(this.coledge){
              let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.circles[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.circles[index].stroke = selectedEdgeColor; 
+          this.shapes[v]=this.circles[index]; // Assign the selected edge color to the stroke property of the shape object
           this.coledge = false;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                 
@@ -489,16 +573,27 @@ newpo(type, index,e) {
      }
      else if(type==='line')
      {
+       let v=0;
+        for(let i=0;i<this.shapes.length;i++)
+        {
+          if(this.shapes[i]===this.lines[index])
+          {
+            v=i;
+            break;
+          }
+        }
              if(this.delete)
         {
          
               this.lines.splice(index,1);
+              this.shapes.slice(v,1);
                 this.delete=false;
         }
         if(this.coledge){
              let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.lines[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
           this.coledge = false;
+          this.shapes[v]=this.lines[index];
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                 
         }
@@ -506,26 +601,39 @@ newpo(type, index,e) {
      /************************************************************ */
      else if(type==='rect')
      {
-
+      this.rectangles[index].draggable=true;
+       let v=0;
+        for(let i=0;i<this.shapes.length;i++)
+        {
+          if(this.shapes[i]===this.rectangles[index])
+          {
+            v=i;
+            break;
+          }
+        }
       this.rectangles[index].draggable=true;
       if(this.resize)
+      if(this.resiz)
       {
         this.rectangles[index].draggable=false;
         this.rectangles[index].width *= this.userInput;
         this.rectangles[index].height *= this.userInput;
         this.rectangles[index].draggable=true;
+        this.shapes[v]=this.rectangles[index];
         this.resiz=false;
       }
              if(this.delete)
         {
          
               this.rectangles.splice(index,1);
+              this.shapes.splice(v,1);
                 this.delete=false;
         }
         if (this.cofill) {
         let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.rectangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         //selectedFillColor=this.pureColor
+        this.shapes[v]=this.rectangles[index];
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
@@ -533,6 +641,7 @@ newpo(type, index,e) {
         if(this.coledge){
              let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.rectangles[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+          this.shapes[v]=this.rectangles[index];
           this.coledge = false;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                 
@@ -544,29 +653,42 @@ newpo(type, index,e) {
       else if(type==='ellipse') {
         this.ellipses[index].draggable=true;
       if(this.resize)
+       let v=0;
+        for(let i=0;i<this.shapes.length;i++)
+        {
+          if(this.shapes[i]===this.ellipses[index])
+          {
+            v=i;
+            break;
+          }
+        }
+      if(this.resiz)
       {
         this.ellipses[index].draggable=false;
         this.ellipses[index].radiusX *=  this.userInput;
         this.ellipses[index].radiusY *=  this.userInput;
         this.ellipses[index].draggable=true;
+        this.shapes[v]=this.ellipses[index];
         this.resiz=false;
       }
                 if(this.delete)
         {
          
               this.ellipses.splice(index,1);
+              this.shapes.splice(v,1);
                 this.delete=false;
         }
           if (this.cofill) {
       let selectedFillColor = this.pureColor;
       this.ellipses[index].fill = selectedFillColor;
+      this.shapes[v]=this.ellipses[index];
       this.cofill = false;
       this.pureColor = '#ffffff';
     }
-
         if(this.coledge){
            let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.ellipses[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
+            this.shapes[v]=this.ellipses[index];
           this.coledge = false;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                 
@@ -578,17 +700,30 @@ newpo(type, index,e) {
      {
       this.squares[index].draggable=true;
       if(this.resize)
+        let v=0;
+        for(let i=0;i<this.shapes.length;i++)
+        {
+          if(this.shapes[i]===this.squares[index])
+          {
+            v=i;
+            break;
+          }
+        }
+      if(this.resiz)
       {
         this.squares[index].draggable=false;
         this.squares[index].width *=  this.userInput;
         this.squares[index].height *=  this.userInput;
+       
         this.squares[index].draggable=true;
+         this.shapes[v]=this.squares[index];
       }
      // this.squares[index].fill = this.selectedColor;
                if(this.delete)
         {
          
               this.squares.splice(index,1);
+              this.shapes.splice(v,1);
                 this.delete=false;
         }
       if (this.cofill) {
@@ -596,6 +731,7 @@ newpo(type, index,e) {
         this.selectedColor2= selectedFillColor
         this.squares[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
+          this.shapes[v]=this.squares[index];
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
         
@@ -605,16 +741,15 @@ newpo(type, index,e) {
                   let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.squares[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
           this.coledge = false;
+            this.shapes[v]=this.squares[index];
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                 
         }         
        
        
      }
-
     },
  
-
     del()
     {
               this.rectangle=false;
@@ -772,22 +907,45 @@ newpo(type, index,e) {
                      this.shapes.push({...this.currentShape});
                    // while(true){
                     console.log(this.shapes[0]);
+                   // console.log(this.shapes[0]);
                    // }
         }
       
       else if(this.rectangle)
       this.rectangles.push({...this.currentShape});
+      else if(this.rectangle){
+          this.rectangles.push({...this.currentShape});
+            this.shapes.push({...this.currentShape});
+      }
+      
       else if(this.ellips)
             this.ellipses.push({...this.currentShape});
+      {
+           this.ellipses.push({...this.currentShape});
+             this.shapes.push({...this.currentShape});
+      }
+           
       else if(this.lin||this.bru)
            this.lines.push({...this.currentShape});
+      {
+             this.lines.push({...this.currentShape});
+               this.shapes.push({...this.currentShape});
+      }
+          
       else if(this.sqrt)
            this.squares.push({...this.currentShape});
+      {
+                this.squares.push({...this.currentShape});
+                  this.shapes.push({...this.currentShape});
+      }
+          
       else if(this.tria)
             this.triangles.push({...this.currentShape});    
-
-
-
+      {
+             this.triangles.push({...this.currentShape}); 
+                this.shapes.push({...this.currentShape});
+      }
+              
         this.currentShape = null;
         this.circ=false;
         this.ellips=false;
@@ -891,15 +1049,17 @@ newpo(type, index,e) {
       }
       
     },
+    async saving()
+    {
+         const url = `http://localhost:8080/${this.path}`
+            const req = await fetch(url)
+            const res = await req.text()
+            return await res
+    }
   }
 }
 
 </script>
-
-
-
-
-
 <style>
 .paint{
   display: flex;
@@ -911,7 +1071,6 @@ newpo(type, index,e) {
   display: flex;
   flex-direction: row;
   gap:0px;
-
 }
 .operations{
   width:600px;
@@ -926,7 +1085,6 @@ newpo(type, index,e) {
   margin:  2px auto;
   justify-content: center;
   justify-items: center;
-
 }
 .clorfil{
   margin-right: 30px;
@@ -954,7 +1112,6 @@ newpo(type, index,e) {
   gap: 5px;
   
 }
-
 .shaps{
   margin-right: 3px;
   display: flex;
@@ -978,7 +1135,6 @@ button:hover {
 label:hover{
   opacity: 100;
   color: aliceblue;
-
 }
 .square {
   height: 10px;
@@ -1025,7 +1181,6 @@ label:hover{
   flex-direction: column;
   gap: 5px;
   margin-bottom: 10px;
-
 }
 .fillcolor{
   height: 24px;
@@ -1033,7 +1188,5 @@ label:hover{
   border: black solid;
   border-radius: 49%;
   overflow: hidden;
-
 }
-
 </style>

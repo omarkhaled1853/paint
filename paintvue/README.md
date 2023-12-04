@@ -1,4 +1,4 @@
-# painpro.vue
+# paintvue
 
 ## Project setup
 ```
