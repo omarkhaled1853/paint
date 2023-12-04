@@ -4,7 +4,7 @@
     <div class="operations" >
       <button style="background-color:rgb(111, 125, 131)">open <i class="fa-solid fa-folder-open"></i></button>
       <button style="background-color:rgb(111, 125, 131)" @click="save()">Save <i class="fa-solid fa-floppy-disk"></i></button>
-      <button style="background-color:rgb(111, 125, 131)">Undo <i class="fa-solid fa-arrow-rotate-left"></i></button>
+      <button style="background-color:rgb(111, 125, 131)" @click="undo()">Undo <i class="fa-solid fa-arrow-rotate-left"></i></button>
       <button style="background-color:rgb(111, 125, 131)">Redo <i class="fa-solid fa-rotate-right"></i></button>
       <button  style="background-color:rgb(111, 125, 131)" @click="del()">Delete <i class="fa-solid fa-eraser"></i></button>
       <button style="background-color:rgb(111, 125, 131)"  @click="clr()">clear <i class="fa-solid fa-trash"></i></button>
@@ -66,7 +66,7 @@
          v-for="(rect, index) in rectangles"
           :key="index"
           :config="{ 
-            type:'rectangle',
+            type:'Rectangle',
             x:  rect.x,
             y: rect.y,
             width: rect.width,
@@ -232,7 +232,8 @@
         resiz:false,
         userInput:0,
         sav:false,
-        path:"D:\\test.json" 
+        path:"D:\\shape.xml" ,
+        shapeType: ''
       };
     },
     methods: {
@@ -795,6 +796,7 @@
               y: position.y,
                fill:this.pureColor,
               stroke:this.pureColor2,
+              strokeWidth:2,
               width: 0,
               height: 0,
             };
@@ -814,6 +816,7 @@
               y: position.y,
               fill:this.pureColor,
               stroke:this.pureColor2,
+              strokeWidth:2,
               radius: 0,
             };
           }
@@ -831,6 +834,7 @@
                   y: position.y,
                    fill:this.pureColor,
               stroke:this.pureColor2,
+              strokeWidth:2,
                 radiusX: 0,
                 radiusY:0
                 };
@@ -845,8 +849,10 @@
               const position = stage.getPointerPosition();
               if (position) {
                 this.currentShape = {
-                  
+                  x: position.x,
+                  y: position.y,
               stroke:this.pureColor2,
+              strokeWidth:2,
                points: [position.x, position.y]
                 };
               }
@@ -862,6 +868,8 @@
                 this.currentShape = {
                 x: position.x,
               y: position.y,
+
+              strokeWidth:2,
                fill:this.pureColor,
               stroke:this.pureColor2,
               width: 0,
@@ -880,6 +888,7 @@
                 this.currentShape = {
                  x: position.x,
                   y: position.y,
+                  strokeWidth:2,
                   fill:this.pureColor,
               stroke:this.pureColor2,
                   radius:0
@@ -916,6 +925,7 @@
           console.log("xxxxx");
           if(this.circ)
           {
+            this.shapeType = 'Circle';
                        this.circles.push({ ...this.currentShape });
                        this.shapes.push({...this.currentShape});
                      // while(true){
@@ -924,34 +934,44 @@
           }
         
         else if(this.rectangle){
+          this.shapeType = 'Rectangle';
+
             this.rectangles.push({...this.currentShape});
               this.shapes.push({...this.currentShape});
         }
         
         else if(this.ellips)
         {
+          this.shapeType = 'Ellipse';
+
              this.ellipses.push({...this.currentShape});
                this.shapes.push({...this.currentShape});
         }
              
         else if(this.lin||this.bru)
         {
+          this.shapeType = 'Line';
+
                this.lines.push({...this.currentShape});
                  this.shapes.push({...this.currentShape});
         }
             
         else if(this.sqrt)
         {
+          this.shapeType = 'Square';
+
                   this.squares.push({...this.currentShape});
                     this.shapes.push({...this.currentShape});
         }
             
         else if(this.tria)
         {
+          this.shapeType = 'Triangle';
+
                this.triangles.push({...this.currentShape}); 
                   this.shapes.push({...this.currentShape});
         }
-                
+        this.createShape();
   
   
   
@@ -969,6 +989,14 @@
         
         
       
+      },
+      async createShape(){
+        await fetch('http://localhost:8080/create', {
+          method: 'POST',
+          body: (this.shapeType + JSON.stringify(this.currentShape)),
+        }).catch(error => {
+          console.error('Fetch error:', error);
+        });
       },
       draw() {
         if(this.rectangle)
