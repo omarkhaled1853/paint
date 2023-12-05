@@ -26,7 +26,6 @@ public class xmlLoad {
             TypeReference<List<Shape>> typeReference = new TypeReference<List<Shape>>() {};
             List<Shape> list = mapper.readValue(inputStream, typeReference);
             shapeService.setList(list);
-//            studentService = mapper.readValue(path.toFile(), StudentService.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -7,6 +7,7 @@ public class Line extends Shape{
     final String type = "Line";
 
     private List<Double> points;
+
     public String getType(){
         return this.type;
     }

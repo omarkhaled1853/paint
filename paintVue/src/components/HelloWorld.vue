@@ -301,7 +301,9 @@ newpo(type, index,e) {
     this.shapeType = "Circle"
      for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -327,6 +329,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+         
         }
     this.circles[index].x=e.target.x();
     this.circles[index].y=e.target.y();
@@ -343,7 +347,9 @@ newpo(type, index,e) {
       this.shapeType = "Rectangle"
      for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                 if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -373,6 +379,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+        
         }
     this.rectangles[index].x=e.target.x();
     this.rectangles[index].y=e.target.y();
@@ -388,7 +396,9 @@ newpo(type, index,e) {
       this.shapeType = "Ellipse"
     for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                  if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -415,6 +425,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+       
         }
     this.ellipses[index].x=e.target.x();
     this.ellipses[index].y=e.target.y();
@@ -430,7 +442,9 @@ newpo(type, index,e) {
       this.shapeType = "Line"
     for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                 if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -461,6 +475,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+          
         }
     this.lines[index].x=e.target.x();
     this.lines[index].y=e.target.y();
@@ -476,7 +492,9 @@ newpo(type, index,e) {
       this.shapeType = "Square"
     for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                  if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -506,6 +524,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+        
         }
     this.squares[index].x=e.target.x();
     this.squares[index].y=e.target.y();
@@ -522,32 +542,36 @@ newpo(type, index,e) {
     
         for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
-          {
-            if(this.shapes[i].y===this.vv)
-            { 
-                if(this.shapes[i].radius===this.triangles[index].radius)
-                {
-                   
+              if(this.shapes[i]!==null)
+              {
+                        if(this.shapes[i].x===this.cc)
+              {
+                if(this.shapes[i].y===this.vv)
+                { 
+                    if(this.shapes[i].radius===this.triangles[index].radius)
+                    {
+                      
 
-                   if(this.shapes[i].fill===this.triangles[index].fill)
-                   {
-                      if(this.shapes[i].stroke===this.triangles[index].stroke)
+                      if(this.shapes[i].fill===this.triangles[index].fill)
                       {
-                             v=i;
-                            console.log(v);
-                            break;
+                          if(this.shapes[i].stroke===this.triangles[index].stroke)
+                          {
+                                v=i;
+                                console.log(v);
+                                break;
+                          }
                       }
-                   }
+                    }
+
+
+                          
+
                 }
 
-
-                       
-
-            }
-
-          
-          }
+              
+              }
+              }
+         
         }
          console.log(v);
     this.triangles[index].x=e.target.x();
@@ -708,36 +732,38 @@ newpo(type, index,e) {
          //console.log(this.shapes.length);
            this.triangles[index].draggable=true;
         let v=0;
-        for(let i=0;i<this.shapes.length;i++)
+      for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.triangles[index].x)
-          {
-            if(this.shapes[i].y===this.triangles[index].y)
-            { 
-                if(this.shapes[i].radius===this.triangles[index].radius)
-                {
-                   
+              if(this.shapes[i]!==null)
+              {
+                        if(this.shapes[i].x===this.cc)
+              {
+                if(this.shapes[i].y===this.vv)
+                { 
+                    if(this.shapes[i].radius===this.triangles[index].radius)
+                    {
+                      
 
-                   if(this.shapes[i].fill===this.triangles[index].fill)
-                   {
-                      if(this.shapes[i].stroke===this.triangles[index].stroke)
+                      if(this.shapes[i].fill===this.triangles[index].fill)
                       {
-                             v=i;
-                          //  console.log(v);
-                            break;
+                          if(this.shapes[i].stroke===this.triangles[index].stroke)
+                          {
+                                v=i;
+                                console.log(v);
+                                break;
+                          }
                       }
-                   }
+                    }
+
+
+                          
+
                 }
 
-
-                       
-
-            }
-
-            // v=i;
-            console.log(v);
-            // break;
-          }
+              
+              }
+              }
+         
         }
         // console.log(v);
         console.log(this.shapes)
@@ -808,9 +834,11 @@ newpo(type, index,e) {
      {
        this.shapeType = "Circle"
        let v=0;
-     for(let i=0;i<this.shapes.length;i++)
+      for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -836,6 +864,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+         
         }
          if(this.cop)
         {
@@ -901,8 +931,9 @@ newpo(type, index,e) {
        this.shapeType = "Line"
     for(let i=0;i<this.shapes.length;i++)
         {
-
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                 if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -933,6 +964,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+          
         }
          if(this.cop)
         {
@@ -972,7 +1005,9 @@ newpo(type, index,e) {
        this.shapeType = "Rectangle"
      for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                 if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -1002,6 +1037,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+        
         }
          if(this.cop)
         {
@@ -1064,9 +1101,11 @@ newpo(type, index,e) {
       else if(type==='ellipse') {
         let v=0;
          this.shapeType = "Ellipse"
-    for(let i=0;i<this.shapes.length;i++)
+   for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                  if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -1093,6 +1132,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+       
         }
         if(this.cop)
         {
@@ -1160,7 +1201,9 @@ newpo(type, index,e) {
         this.shapeType = "Square"
     for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i].x===this.cc)
+          if(this.shapes[i]!==null)
+          {
+                  if(this.shapes[i].x===this.cc)
           {
             if(this.shapes[i].y===this.vv)
             { 
@@ -1190,6 +1233,8 @@ newpo(type, index,e) {
 
           
           }
+          }
+        
         }
          if(this.cop)
         {
@@ -1620,6 +1665,54 @@ newpo(type, index,e) {
     async undo()
     {
          await fetch('http://localhost:8080/undo', {
+        method: 'GET',
+      })
+      .then(res => res.json())
+      .then(data => this.shapes = data)
+      
+     console.log(this.shapes);
+      this.circles=[];
+      this.lines=[];
+      this.squares=[];
+      this.rectangles=[];
+      this.triangles=[];
+      this.ellipses=[];
+      
+      for(let i=0;i<this.shapes.length;i++)
+      {
+        if(this.shapes[i]!==null)
+        {
+               if(this.shapes[i].type==='Quadrilateral'&&this.shapes[i].width!==this.shapes[i].height)
+          {
+             this.rectangles.push({...this.shapes[i]});
+          }
+          else if(this.shapes[i].type==='Circle')
+          {
+              this.circles.push({...this.shapes[i]});
+          }
+          else if(this.shapes[i].type==='Ellipse')
+          {
+            this.ellipses.push({...this.shapes[i]})
+          }
+         else  if(this.shapes[i].type==='Quadrilateral')
+          {
+             this.squares.push({...this.shapes[i]});
+          }
+          else if(this.shapes[i].type==='Triangle')
+          {
+            this.triangles.push({...this.shapes[i]});
+          }
+         else if(this.shapes[i].type==='Line')
+         {
+             this.lines.push({...this.shapes[i]});
+         }
+        }
+         
+      }
+    },
+     async Redo()
+    {
+         await fetch('http://localhost:8080/redo', {
         method: 'GET',
       })
       .then(res => res.json())

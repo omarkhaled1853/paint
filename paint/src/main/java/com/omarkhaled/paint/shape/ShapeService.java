@@ -2,36 +2,46 @@ package com.omarkhaled.paint.shape;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 @Service
 public class ShapeService {
     private List<Shape> list = new ArrayList<>();
 
-    private Stack<Shape> Undo;
+    private Stack<Shape> Undo = new Stack<>();
 
-    private Stack<Shape>Redo;
-    private Map<Long, Stack<Shape>> Shapes;
+    private Stack<Shape>Redo = new Stack<>();
+    private Map<Long, Stack<Shape>> Shapes = new HashMap<>();
 
+    private Long generalIndex = 0L;
+
+    public Long getGeneralIndex() {
+        return generalIndex;
+    }
+
+    public void incrementGeneralIndex() {
+        this.generalIndex++;
+    }
+
+    public void setUndo(Stack<Shape> undo) {
+        Undo = undo;
+    }
+
+    public void setRedo(Stack<Shape> redo) {
+        Redo = redo;
+    }
+
+    public void setShapes(Map<Long, Stack<Shape>> shapes) {
+        Shapes = shapes;
+    }
+
+    //set list
+    public void setList(List<Shape> list) {
+        this.list = list;
+    }
 
     public List<Shape> getList() {
         return list;
-    }
-
-    public void setList(List<Shape> list) {
-
-        this.list = list;
-    }
-    public void setList(){
-        for(Map.Entry<Long, Stack<Shape>> entry : Shapes.entrySet()){
-            if(!entry.getValue().empty())
-                list.add(entry.getValue().peek());
-            else
-                list.add(null);
-        }
     }
 
     public Stack<Shape> getUndo() {
@@ -41,34 +51,30 @@ public class ShapeService {
     public Stack<Shape> getRedo() {
         return Redo;
     }
-
     public Map<Long, Stack<Shape>> getShapes() {
         return Shapes;
     }
 
-    public  void addToMap(Shape shape){
-        Stack<Shape> newStack = new Stack<>();
-        newStack.push(shape);
-        Shapes.put(shape.getIndex(), newStack);
-    }
-
-    public void addToUndo(Shape shape){
-        Undo.push(shape);
-    }
-
-    public void undo(){
+    public void setListFromMap(){
         for(Map.Entry<Long, Stack<Shape>> entry : Shapes.entrySet()){
             if(!entry.getValue().empty())
                 list.add(entry.getValue().peek());
-            else{
+            else
                 list.add(null);
-            }
         }
     }
 
-    public void redo(){
-        for(Map.Entry<Long, Stack<Shape>> entry : Shapes.entrySet()){
-            list.add(entry.getValue().peek());
-        }
+
+    //add new stake for the created shape
+    public void addToMap(Shape shape){
+        Stack<Shape> newStack = new Stack<>();
+        newStack.push(shape);
+//        System.out.println(generalIndex);
+        Shapes.put(generalIndex, newStack);
+    }
+
+    //add to undo stack
+    public void addToUndo(Shape shape){
+        Undo.push(shape);
     }
 }

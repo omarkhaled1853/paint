@@ -15,7 +15,8 @@
     "konva": "^9.2.3",
     "vue": "^3.2.13",
     "vue-konva": "^3.0.2",
-    "vue3-colorpicker": "^2.2.3"
+    "vue3-colorpicker": "^2.2.3",
+    "vuetify": "^3.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

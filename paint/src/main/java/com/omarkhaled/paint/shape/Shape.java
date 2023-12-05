@@ -53,9 +53,6 @@ public abstract class Shape {
     public void setIndex(long index) {
         this.index = index;
     }
-    public void incrementIndex(){
-        this.index++;
-    };
     public abstract Shape Clone();
     public abstract String getType();
 
