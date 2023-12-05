@@ -806,21 +806,46 @@ newpo(type, index,e) {
      }
      else if(type==='circle')
      {
-      this.shapeType = "Circle"
-      this.circles[index].draggable=true;
+       this.shapeType = "Circle"
        let v=0;
-        for(let i=0;i<this.shapes.length;i++)
+     for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i]===this.circles[index])
+          if(this.shapes[i].x===this.cc)
           {
-            v=i;
-            break;
+            if(this.shapes[i].y===this.vv)
+            { 
+                if(this.shapes[i].radius===this.circles[index].radius)
+                {
+                   
+
+                   if(this.shapes[i].fill===this.circles[index].fill)
+                   {
+                      if(this.shapes[i].stroke===this.circles[index].stroke)
+                      {
+                             v=i;
+                            console.log(v);
+                            break;
+                      }
+                   }
+                }
+
+
+                       
+
+            }
+
+          
           }
         }
          if(this.cop)
         {
           this.ord=v;
-          this.prototype();
+          console.log(this.shapes[v])
+          await this.prototype();
+          console.log(this.co)
+          this.circles.push({...this.co})
+          this.shapes.push({...this.co})
+          this.cop = false
            
         }
       if(this.resiz)
@@ -828,7 +853,7 @@ newpo(type, index,e) {
         this.circles[index].draggable=false;
         this.circles[index].radius *= this.userInput;
         this.circles[index].draggable=true;
-        this.shapes[v]=this.circles[index];
+        this.shapes[v].radius=this.circles[index].radius;
         this.resiz=false;
           this.modifysh=this.shapes[v];
            this.ord=v;
@@ -840,15 +865,14 @@ newpo(type, index,e) {
               this.circles.splice(index,1);
 
                 this.delete=false;
-                  this.modifysh=this.shapes[v];
                     this.ord=v;
-                  this.modify()
+                  this.modify2()
         }
         if (this.cofill) {
 
         let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.circles[index].fill = selectedFillColor; 
-           this.shapes[v]=this.circles[index];   // Assign the selected fill color to the fill property of the shape object
+           this.shapes[v].fill=this.circles[index].fill;   // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
@@ -860,7 +884,7 @@ newpo(type, index,e) {
                 if(this.coledge){
              let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.circles[index].stroke = selectedEdgeColor; 
-          this.shapes[v]=this.circles[index]; // Assign the selected edge color to the stroke property of the shape object
+          this.shapes[v].stroke=this.circles[index].stroke; // Assign the selected edge color to the stroke property of the shape object
           this.coledge = false;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
               this.modifysh=this.shapes[v];
@@ -873,20 +897,53 @@ newpo(type, index,e) {
      }
      else if(type==='line')
      {
-      this.shapeType = "Line"
-       let v=0;
-        for(let i=0;i<this.shapes.length;i++)
+      let v=0;
+       this.shapeType = "Line"
+    for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i]===this.lines[index])
+
+          if(this.shapes[i].x===this.cc)
           {
-            v=i;
-            break;
+            if(this.shapes[i].y===this.vv)
+            { 
+          
+                   if(this.shapes[i].points[0]===this.lines[index].points[0])
+                   {
+                    if(this.shapes[i].points[1]===this.lines[index].points[1])
+                    {
+                      if(this.shapes[i].points[2]===this.lines[index].points[2]){
+                        if(this.shapes[i].points[3]===this.lines[index].points[3])
+                        {
+                                 if(this.shapes[i].stroke===this.lines[index].stroke)
+                                 {
+                             v=i;
+                            console.log(v);
+                            break;
+                               }
+
+                        }
+
+                        
+                     
+                      }
+                    }
+                   }      
+
+            }
+
+          
           }
         }
          if(this.cop)
         {
           this.ord=v;
-          this.prototype();
+          console.log(this.shapes[v])
+          await this.prototype();
+          console.log(this.co)
+          this.lines.push({...this.co})
+          this.shapes.push({...this.co})
+          this.cop = false
+           
            
         }
              if(this.delete)
@@ -894,15 +951,14 @@ newpo(type, index,e) {
          
               this.lines.splice(index,1);
                 this.delete=false;
-                  this.modifysh=this.shapes[v];
                   this.ord=v;
-                  this.modify()
+                  this.modify2()
         }
         if(this.coledge){
              let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.lines[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
           this.coledge = false;
-          this.shapes[v]=this.lines[index];
+          this.shapes[v].stroke=this.lines[index].stroke;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                   this.modifysh=this.shapes[v];
                     this.ord=v;
@@ -912,21 +968,50 @@ newpo(type, index,e) {
      /************************************************************ */
      else if(type==='rect')
      {
-      this.shapeType = "Rectangle"
-      this.rectangles[index].draggable=true;
-       let v=0;
-        for(let i=0;i<this.shapes.length;i++)
+      let v=0;
+       this.shapeType = "Rectangle"
+     for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i]===this.rectangles[index])
+          if(this.shapes[i].x===this.cc)
           {
-            v=i;
-            break;
+            if(this.shapes[i].y===this.vv)
+            { 
+                if(this.shapes[i].width===this.rectangles[index].width)
+                {
+                   
+
+                   if(this.shapes[i].fill===this.rectangles[index].fill)
+                   {
+                      if(this.shapes[i].stroke===this.rectangles[index].stroke)
+                      {
+                        if(this.shapes[i].height===this.rectangles[index].height)
+                        {
+                                 
+                             v=i;
+                            console.log(v);
+                            break;
+                        }
+                      }
+                   }
+                }
+
+
+                       
+
+            }
+
+          
           }
         }
          if(this.cop)
         {
           this.ord=v;
-          this.prototype();
+          console.log(this.shapes[v])
+          await this.prototype();
+          console.log(this.co)
+          this.rectangles.push({...this.co})
+          this.shapes.push({...this.co})
+          this.cop = false
            
         }
       this.rectangles[index].draggable=true;
@@ -936,7 +1021,8 @@ newpo(type, index,e) {
         this.rectangles[index].width *= this.userInput;
         this.rectangles[index].height *= this.userInput;
         this.rectangles[index].draggable=true;
-        this.shapes[v]=this.rectangles[index];
+        this.shapes[v].width=this.rectangles[index].width;
+        this.shapes[v].height=this.rectangles[index].height;
         this.resiz=false;
           this.modifysh=this.shapes[v];
             this.ord=v;
@@ -947,15 +1033,14 @@ newpo(type, index,e) {
          
               this.rectangles.splice(index,1);
                 this.delete=false;
-                  this.modifysh=this.shapes[v];
                 this.ord=v;
-              this.modify()
+              this.modify2()
         }
         if (this.cofill) {
         let selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.rectangles[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         //selectedFillColor=this.pureColor
-        this.shapes[v]=this.rectangles[index];
+        this.shapes[v].fill=this.rectangles[index].fill;
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
                 this.modifysh=this.shapes[v];
@@ -965,7 +1050,7 @@ newpo(type, index,e) {
         if(this.coledge){
              let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.rectangles[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
-          this.shapes[v]=this.rectangles[index];
+          this.shapes[v].stroke=this.rectangles[index].stroke;
           this.coledge = false;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                this.modifysh=this.shapes[v];
@@ -977,21 +1062,47 @@ newpo(type, index,e) {
      }
      /*************************************************************** */
       else if(type==='ellipse') {
-        this.shapeType = "Ellipse"
-        this.ellipses[index].draggable=true;
-       let v=0;
-        for(let i=0;i<this.shapes.length;i++)
+        let v=0;
+         this.shapeType = "Ellipse"
+    for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i]===this.ellipses[index])
+          if(this.shapes[i].x===this.cc)
           {
-            v=i;
-            break;
+            if(this.shapes[i].y===this.vv)
+            { 
+                if(this.shapes[i].radiusX===this.ellipses[index].radiusX)
+                {
+                   
+
+                   if(this.shapes[i].fill===this.ellipses[index].fill)
+                   {
+                      if(this.shapes[i].stroke===this.ellipses[index].stroke)
+                      {
+                        if(this.shapes[i].radiusY===this.ellipses[index].radiusY)
+                             v=i;
+                            console.log(v);
+                            break;
+                      }
+                   }
+                }
+
+
+                       
+
+            }
+
+          
           }
         }
-         if(this.cop)
+        if(this.cop)
         {
           this.ord=v;
-          this.prototype();
+          console.log(this.shapes[v])
+          await this.prototype();
+          console.log(this.co)
+          this.ellipses.push({...this.co})
+          this.shapes.push({...this.co})
+          this.cop = false
            
         }
       if(this.resiz)
@@ -1000,11 +1111,13 @@ newpo(type, index,e) {
         this.ellipses[index].radiusX *=  this.userInput;
         this.ellipses[index].radiusY *=  this.userInput;
         this.ellipses[index].draggable=true;
-        this.shapes[v]=this.ellipses[index];
+        this.shapes[v].radiusX=this.ellipses[index].radiusx;
+                this.shapes[v].radiusY=this.ellipses[index].radiusY;
+
         this.resiz=false;
           this.modifysh=this.shapes[v];
           this.ord=v;
-          this.modify()
+          this.modify();
 
       }
                 if(this.delete)
@@ -1014,13 +1127,13 @@ newpo(type, index,e) {
                 this.delete=false;
                this.modifysh=this.shapes[v];
                    this.ord=v;
-                  this.modify()
+                  this.modify2()
 
         }
           if (this.cofill) {
       let selectedFillColor = this.pureColor;
       this.ellipses[index].fill = selectedFillColor;
-      this.shapes[v]=this.ellipses[index];
+      this.shapes[v].fill=this.ellipses[index].fill;
       this.cofill = false;
       this.pureColor = '#ffffff';
         this.modifysh=this.shapes[v];
@@ -1031,7 +1144,7 @@ newpo(type, index,e) {
         if(this.coledge){
            let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.ellipses[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
-            this.shapes[v]=this.ellipses[index];
+            this.shapes[v].stroke=this.ellipses[index].stroke;
           this.coledge = false;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
                  this.modifysh=this.shapes[v];
@@ -1043,21 +1156,51 @@ newpo(type, index,e) {
         /**************************************************** */
      else if(type==='square')
      {
-      this.shapeType = "Square"
-      this.squares[index].draggable=true;
-        let v=0;
-        for(let i=0;i<this.shapes.length;i++)
+      let v=0;
+        this.shapeType = "Square"
+    for(let i=0;i<this.shapes.length;i++)
         {
-          if(this.shapes[i]===this.squares[index])
+          if(this.shapes[i].x===this.cc)
           {
-            v=i;
-            break;
+            if(this.shapes[i].y===this.vv)
+            { 
+                if(this.shapes[i].width===this.squares[index].width)
+                {
+                   
+
+                   if(this.shapes[i].fill===this.squares[index].fill)
+                   {
+                      if(this.shapes[i].stroke===this.squares[index].stroke)
+                      {
+                        if(this.shapes[i].height===this.squares[index].height)
+                        {
+                                 
+                             v=i;
+                            console.log(v);
+                            break;
+                        }
+                      }
+                   }
+                }
+
+
+                       
+
+            }
+
+          
           }
         }
          if(this.cop)
         {
-          this.ord=v;
-          this.prototype();
+         this.ord=v;
+          console.log(this.shapes[v])
+          await this.prototype();
+          console.log(this.co)
+          this.squares.push({...this.co})
+          this.shapes.push({...this.co})
+          this.cop = false
+           
            
         }
       if(this.resiz)
@@ -1067,10 +1210,12 @@ newpo(type, index,e) {
         this.squares[index].height *=  this.userInput;
        
         this.squares[index].draggable=true;
-         this.shapes[v]=this.squares[index];
+         this.shapes[v].width=this.squares[index].width;
+         this.shapes[v].height=this.squares[index].height;
            this.modifysh=this.shapes[v];
             this.ord=v;
             this.modify()
+            this.resiz=false;
       }
      // this.squares[index].fill = this.selectedColor;
                if(this.delete)
@@ -1078,16 +1223,15 @@ newpo(type, index,e) {
          
               this.squares.splice(index,1);
                 this.delete=false;
-                  this.modifysh=this.shapes[v];
                   this.ord=v;
-                this.modify()
+                this.modify2()
         }
       if (this.cofill) {
         let   selectedFillColor = this.pureColor; // Store the selected fill color in a variable
         this.selectedColor2= selectedFillColor
         this.squares[index].fill = selectedFillColor; // Assign the selected fill color to the fill property of the shape object
         selectedFillColor=this.pureColor
-          this.shapes[v]=this.squares[index];
+          this.shapes[v].fill=this.squares[index].fill;
         this.cofill = false;
         this.pureColor = '#ffffff'; // Reset the pureColor to a default value or another selected fill color
           this.modifysh=this.shapes[v];
@@ -1100,7 +1244,7 @@ newpo(type, index,e) {
                   let selectedEdgeColor = this.pureColor; // Use the selected edge color
           this.squares[index].stroke = selectedEdgeColor; // Assign the selected edge color to the stroke property of the shape object
           this.coledge = false;
-            this.shapes[v]=this.squares[index];
+            this.shapes[v].stroke=this.squares[index].stroke;
           this.pureColor = '#ffffff'; // Reset the pureColor2 to a default value or another selected edge color
             this.modifysh=this.shapes[v];
             this.ord=v;
@@ -1369,7 +1513,7 @@ newpo(type, index,e) {
     {
         await fetch('http://localhost:8080/delete', {
         method: 'POST',
-        body: (this.ord),
+        body: (this.ord + "," + this.shapeType),
       }).catch(error => {
         console.error('Fetch error:', error);
       });
@@ -1472,6 +1616,54 @@ newpo(type, index,e) {
       }).catch(error => {
         console.error('Fetch error:', error);
       });
+    },
+    async undo()
+    {
+         await fetch('http://localhost:8080/undo', {
+        method: 'GET',
+      })
+      .then(res => res.json())
+      .then(data => this.shapes = data)
+      
+     console.log(this.shapes);
+      this.circles=[];
+      this.lines=[];
+      this.squares=[];
+      this.rectangles=[];
+      this.triangles=[];
+      this.ellipses=[];
+      
+      for(let i=0;i<this.shapes.length;i++)
+      {
+        if(this.shapes[i]!==null)
+        {
+               if(this.shapes[i].type==='Quadrilateral'&&this.shapes[i].width!==this.shapes[i].height)
+          {
+             this.rectangles.push({...this.shapes[i]});
+          }
+          else if(this.shapes[i].type==='Circle')
+          {
+              this.circles.push({...this.shapes[i]});
+          }
+          else if(this.shapes[i].type==='Ellipse')
+          {
+            this.ellipses.push({...this.shapes[i]})
+          }
+         else  if(this.shapes[i].type==='Quadrilateral')
+          {
+             this.squares.push({...this.shapes[i]});
+          }
+          else if(this.shapes[i].type==='Triangle')
+          {
+            this.triangles.push({...this.shapes[i]});
+          }
+         else if(this.shapes[i].type==='Line')
+         {
+             this.lines.push({...this.shapes[i]});
+         }
+        }
+         
+      }
     }
   }
 }
