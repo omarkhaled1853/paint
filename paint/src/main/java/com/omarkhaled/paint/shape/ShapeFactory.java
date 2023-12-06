@@ -17,8 +17,11 @@ public class ShapeFactory {
             case "Triangle" -> {
                 return new Triangle();
             }
-            case "Square", "Rectangle" -> {
-                return new Quadrilateral();
+            case "Square" -> {
+                return new Square();
+            }
+            case "Rectangle" -> {
+                return new Rectangle();
             }
             default -> throw new RuntimeException();
         }

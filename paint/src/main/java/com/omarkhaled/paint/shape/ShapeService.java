@@ -1,10 +1,13 @@
 package com.omarkhaled.paint.shape;
 
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@XmlRootElement(name = "ArrayList")
 public class ShapeService {
     private List<Shape> list = new ArrayList<>();
 
@@ -17,6 +20,10 @@ public class ShapeService {
 
     public Long getGeneralIndex() {
         return generalIndex;
+    }
+
+    public void setGeneralIndex(Long generalIndex) {
+        this.generalIndex = generalIndex;
     }
 
     public void incrementGeneralIndex() {
@@ -40,6 +47,7 @@ public class ShapeService {
         this.list = list;
     }
 
+    @XmlElement(name = "item")
     public List<Shape> getList() {
         return list;
     }
@@ -64,12 +72,27 @@ public class ShapeService {
         }
     }
 
+    public void setMapFromList(){
+        for (Shape shape : list) {
+            Stack<Shape> stack = new Stack<Shape>();
+            stack.push(shape);
+            Shapes.put(generalIndex, stack);
+            generalIndex++;
+        }
+    }
+
+    public void modifyIndex(){
+        for (Shape shape : list){
+            shape.setIndex(generalIndex++);
+        }
+        generalIndex = 0L;
+    }
+
 
     //add new stake for the created shape
     public void addToMap(Shape shape){
         Stack<Shape> newStack = new Stack<>();
         newStack.push(shape);
-//        System.out.println(generalIndex);
         Shapes.put(generalIndex, newStack);
     }
 

@@ -1,5 +1,8 @@
 package com.omarkhaled.paint.shape;
 
+
+import jakarta.xml.bind.annotation.XmlElement;
+
 public abstract class Shape {
     private double x;
     private double y;
@@ -7,6 +10,8 @@ public abstract class Shape {
     private String stroke;
     private double strokeWidth;
     private long index;
+
+    @XmlElement
     public double getX() {
         return x;
     }

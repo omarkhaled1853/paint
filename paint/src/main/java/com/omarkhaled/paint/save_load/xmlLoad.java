@@ -1,15 +1,15 @@
 package com.omarkhaled.paint.save_load;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.omarkhaled.paint.shape.Shape;
 import com.omarkhaled.paint.shape.ShapeService;
 
+import java.beans.XMLDecoder;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class xmlLoad {
     ShapeService shapeService;
@@ -19,14 +19,27 @@ public class xmlLoad {
     }
 
     public void load(Path path){
-
+        FileInputStream fis = null;
         try {
-            XmlMapper mapper = new XmlMapper();
-            InputStream inputStream = new FileInputStream(path.toFile());
-            TypeReference<List<Shape>> typeReference = new TypeReference<List<Shape>>() {};
-            List<Shape> list = mapper.readValue(inputStream, typeReference);
+            fis = new FileInputStream(path.toFile());
+            XMLDecoder decoder = new XMLDecoder(fis);
+            List<Shape> list = new ArrayList<>();
+            while (true){
+                try {
+                    Object object = decoder.readObject();
+                    list.add((Shape) object);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    break;
+                }
+            }
             shapeService.setList(list);
-        } catch (IOException e) {
+            shapeService.setGeneralIndex(0L);
+            shapeService.setUndo(new Stack<>());
+            shapeService.setRedo(new Stack<>());
+            shapeService.setShapes(new HashMap<>());
+            shapeService.modifyIndex();
+            shapeService.setMapFromList();
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 

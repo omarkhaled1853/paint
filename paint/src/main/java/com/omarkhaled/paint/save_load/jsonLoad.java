@@ -12,14 +12,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class jsonLoad {
 
-    private ShapeService ShapeService ;
+    private final ShapeService shapeService ;
 
-    public jsonLoad(ShapeService ShapeService) {
-        this.ShapeService = ShapeService;
+    public jsonLoad(ShapeService shapeService) {
+        this.shapeService = shapeService;
     }
 
     //convert from json object to object
@@ -33,31 +35,36 @@ public class jsonLoad {
             shape.setStroke((String) jo.get("stroke"));
             shape.setStrokeWidth(((BigDecimal) jo.get("strokeWidth")).doubleValue());
 
-            switch ((String) jo.get("type")){
-                case "Circle":
-                        Circle circle = (Circle) shape;
-                        circle.setRadius(((BigDecimal) jo.get("radius")).doubleValue());
-                    break;
-                case "Elipse":
+            switch ((String) jo.get("type")) {
+                case "Circle" -> {
+                    Circle circle = (Circle) shape;
+                    circle.setRadius(((BigDecimal) jo.get("radius")).doubleValue());
+                }
+                case "Elipse" -> {
                     Elipse elipse = (Elipse) shape;
                     elipse.setRadiusX(((BigDecimal) jo.get("radiusX")).doubleValue());
                     elipse.setRadiusX(((BigDecimal) jo.get("radiusY")).doubleValue());
-                    break;
-                case "Triangle" :
+                }
+                case "Triangle" -> {
                     Triangle triangle = (Triangle) shape;
                     triangle.setRadius(((BigDecimal) jo.get("radius")).doubleValue());
-                    break;
-                case "Quadrilateral" :
-                    Quadrilateral quadrilateral = (Quadrilateral) shape;
-                    quadrilateral.setWidth(((BigDecimal) jo.get("width")).doubleValue());
-                    quadrilateral.setHeight(((BigDecimal) jo.get("height")).doubleValue());
-                    break;
-                case "Line" :
+                }
+                case "Rectangle" -> {
+                    Rectangle Rectangle = (com.omarkhaled.paint.shape.Rectangle) shape;
+                    Rectangle.setWidth(((BigDecimal) jo.get("width")).doubleValue());
+                    Rectangle.setHeight(((BigDecimal) jo.get("height")).doubleValue());
+                }
+                case "Square" -> {
+                    Square Square = (Square) shape;
+                    Square.setWidth(((BigDecimal) jo.get("width")).doubleValue());
+                    Square.setHeight(((BigDecimal) jo.get("height")).doubleValue());
+                }
+                case "Line" -> {
                     Line line = (Line) shape;
                     line.setPoints((List<Double>) jo.get("points"));
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         return shape;
     }
@@ -92,6 +99,12 @@ public class jsonLoad {
             JsonObject jo = (JsonObject) object;
             list.add(fromJsonObject(jo));
         }
-        ShapeService.setList(list);
+        shapeService.setList(list);
+        shapeService.setGeneralIndex(0L);
+        shapeService.setUndo(new Stack<>());
+        shapeService.setRedo(new Stack<>());
+        shapeService.setShapes(new HashMap<>());
+        shapeService.modifyIndex();
+        shapeService.setMapFromList();
     }
 }

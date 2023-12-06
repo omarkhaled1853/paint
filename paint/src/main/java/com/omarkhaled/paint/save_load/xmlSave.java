@@ -1,12 +1,9 @@
 package com.omarkhaled.paint.save_load;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.omarkhaled.paint.shape.ShapeService;
-
+import java.beans.XMLEncoder;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class xmlSave {
 
@@ -17,10 +14,14 @@ public class xmlSave {
     }
 
     public void save(Path path){
-
         try {
-            ObjectMapper mapper = new XmlMapper();
-            mapper.writeValue(path.toFile(), shapeService.getList());
+            FileOutputStream fos = new FileOutputStream(path.toFile());
+            XMLEncoder encoder = new XMLEncoder(fos);
+            for (int i = 0; i < shapeService.getList().size(); i++){
+                encoder.writeObject(shapeService.getList().get(i));
+            }
+            encoder.close();
+            fos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

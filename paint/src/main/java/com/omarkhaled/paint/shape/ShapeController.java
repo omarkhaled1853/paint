@@ -11,6 +11,7 @@ import com.omarkhaled.paint.undo_redo.UndoRedo;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -40,12 +41,19 @@ public class ShapeController {
                 shapeService.addToUndo(circle);
                 shapeService.addToMap(circle);
             }
-            case "Square", "Rectangle" -> {
-                Quadrilateral quadrilateral = (Quadrilateral) shape;
-                quadrilateral = mapper.readValue(type[1], Quadrilateral.class);
-                quadrilateral.setIndex(shapeService.getGeneralIndex());
-                shapeService.addToUndo(quadrilateral);
-                shapeService.addToMap(quadrilateral);
+            case "Square"-> {
+                Square Square = (Square) shape;
+                Square = mapper.readValue(type[1], Square.class);
+                Square.setIndex(shapeService.getGeneralIndex());
+                shapeService.addToUndo(Square);
+                shapeService.addToMap(Square);
+            }
+            case "Rectangle" -> {
+                Rectangle Rectangle = (com.omarkhaled.paint.shape.Rectangle) shape;
+                Rectangle = mapper.readValue(type[1], com.omarkhaled.paint.shape.Rectangle.class);
+                Rectangle.setIndex(shapeService.getGeneralIndex());
+                shapeService.addToUndo(Rectangle);
+                shapeService.addToMap(Rectangle);
             }
             case "Line" -> {
                 Line line = (Line) shape;
@@ -76,7 +84,6 @@ public class ShapeController {
     //copy shape (prototype)
     @PostMapping ("/copy")
     public Shape copyShape(@RequestBody String index){
-        System.out.println(index);
         Shape shape = shapeService.getShapes().get(Long.parseLong(index)).peek().Clone();
         shape.setIndex(shapeService.getGeneralIndex());
         shape.setX(shape.getX() + 1.0);
@@ -102,11 +109,17 @@ public class ShapeController {
                 shapeService.addToUndo(circle);
                 shapeService.getShapes().get(index).push(circle);
             }
-            case "Square", "Rectangle" -> {
-                Quadrilateral quadrilateral = (Quadrilateral) shape;
-                quadrilateral.setIndex(index);
-                shapeService.addToUndo(quadrilateral);
-                shapeService.getShapes().get(index).push(quadrilateral);
+            case "Square" -> {
+                Square Square = (Square) shape;
+                Square.setIndex(index);
+                shapeService.addToUndo(Square);
+                shapeService.getShapes().get(index).push(Square);
+            }
+            case "Rectangle" -> {
+                Rectangle Rectangle = (com.omarkhaled.paint.shape.Rectangle) shape;
+                Rectangle.setIndex(index);
+                shapeService.addToUndo(Rectangle);
+                shapeService.getShapes().get(index).push(Rectangle);
             }
             case "Line" -> {
                 Line line = (Line) shape;
@@ -137,7 +150,7 @@ public class ShapeController {
         ShapeFactory shapeFactory = new ShapeFactory();
         ObjectMapper mapper = new ObjectMapper();
         String[] type = object.split("\\{");
-        Long index = Long.parseLong(type[0]);
+        long index = Long.parseLong(type[0]);
         type[2] = "{" + type[2];
         Shape shape = shapeFactory.createShape(type[1]);
         switch (type[1]){
@@ -148,12 +161,19 @@ public class ShapeController {
                 shapeService.addToUndo(circle);
                 shapeService.getShapes().get(index).push(circle);
             }
-            case "Square", "Rectangle" -> {
-                Quadrilateral quadrilateral = (Quadrilateral) shape;
-                quadrilateral = mapper.readValue(type[2], Quadrilateral.class);
-                quadrilateral.setIndex(index);
-                shapeService.addToUndo(quadrilateral);
-                shapeService.getShapes().get(index).push(quadrilateral);
+            case "Square" -> {
+                Square Square = (Square) shape;
+                Square = mapper.readValue(type[2], Square.class);
+                Square.setIndex(index);
+                shapeService.addToUndo(Square);
+                shapeService.getShapes().get(index).push(Square);
+            }
+            case "Rectangle" -> {
+                Rectangle Rectangle = (com.omarkhaled.paint.shape.Rectangle) shape;
+                Rectangle = mapper.readValue(type[2], com.omarkhaled.paint.shape.Rectangle.class);
+                Rectangle.setIndex(index);
+                shapeService.addToUndo(Rectangle);
+                shapeService.getShapes().get(index).push(Rectangle);
             }
             case "Line" -> {
                 Line line = (Line) shape;
@@ -183,26 +203,32 @@ public class ShapeController {
     //save json file
     @PostMapping ("/saveJson")
     public void saveJson(@RequestBody String path){
+        List<Shape> list = new ArrayList<>();
+        shapeService.setList(list);
+        shapeService.setListFromMap();
         jsonSave jsonSave = new jsonSave(shapeService);
         jsonSave.save(Paths.get(path));
     }
 
     //save xml file
     @PostMapping ("/saveXml")
-    public String saveXml(@RequestBody String path){
+    public void saveXml(@RequestBody String path){
+        List<Shape> list = new ArrayList<>();
+        shapeService.setList(list);
+        shapeService.setListFromMap();
         xmlSave xmlSave = new xmlSave(shapeService);
         xmlSave.save(Paths.get(path));
-        return "saved";
     }
 
     //load json file
-    @GetMapping ("/loadJson")
+    @PostMapping ("/loadJson")
     public List<Shape> loadJson(@RequestBody String path){
         jsonLoad jsonLoad = new jsonLoad(shapeService);
         jsonLoad.load(Paths.get(path));
         return shapeService.getList();
     }
 
+    @PostMapping ("/loadXml")
     //load xml file
     public List<Shape> loadXml(@RequestBody String path){
         xmlLoad xmlLoad = new xmlLoad(shapeService);
@@ -215,19 +241,9 @@ public class ShapeController {
     public List<Shape> shapesUndo(){
         UndoRedo undoRedo = new UndoRedo();
         List<Shape> list = new ArrayList<>();
-
-//        System.out.println(shapeService.getUndo());
-//        System.out.println(shapeService.getRedo());
-//        System.out.println(shapeService.getShapes());
-
         undoRedo.Undo(shapeService.getUndo(), shapeService.getRedo(), shapeService.getShapes());
         shapeService.setList(list);
         shapeService.setListFromMap();
-
-//        System.out.println(shapeService.getUndo());
-//        System.out.println(shapeService.getRedo());
-//        System.out.println(shapeService.getShapes());
-
         return shapeService.getList();
     }
 

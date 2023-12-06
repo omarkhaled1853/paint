@@ -6,10 +6,8 @@ import com.github.cliftonlabs.json_simple.Jsoner;
 import com.omarkhaled.paint.shape.*;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class jsonSave {
@@ -29,47 +27,39 @@ public class jsonSave {
         jo.put("fill", shape.getFill());
         jo.put("stroke", shape.getStroke());
         jo.put("strokeWidth", shape.getStrokeWidth());
-        switch (shape.getType()){
-            case "Circle":
+        switch (shape.getType()) {
+            case "Circle" -> {
                 Circle circle = (Circle) shape;
                 jo.put("radius", circle.getRadius());
-                break;
-            case "Ellipse":
+            }
+            case "Ellipse" -> {
                 Elipse elipse = (Elipse) shape;
                 jo.put("radiusX", elipse.getRadiusX());
                 jo.put("radiusY", elipse.getRadiusY());
-                break;
-            case "Triangle" :
+            }
+            case "Triangle" -> {
                 Triangle triangle = (Triangle) shape;
                 jo.put("radius", triangle.getRadius());
-                break;
-            case "Quadrilateral" :
-                Quadrilateral quadrilateral = (Quadrilateral) shape;
-                jo.put("width", quadrilateral.getWidth());
-                jo.put("height", quadrilateral.getHeight());
-                break;
-            case "Line" :
+            }
+            case "Square" -> {
+                Square Square = (Square) shape;
+                jo.put("width", Square.getWidth());
+                jo.put("height", Square.getHeight());
+            }
+            case "Rectangle" -> {
+                Rectangle Rectangle = (com.omarkhaled.paint.shape.Rectangle) shape;
+                jo.put("width", Rectangle.getWidth());
+                jo.put("height", Rectangle.getHeight());
+            }
+            case "Line" -> {
                 Line line = (Line) shape;
                 jo.put("points", line.getPoints());
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         return jo;
     }
-
-    //default path
-//    private Path getDefaultPath(){
-//        String home = System.getProperty("user.home");
-//        return Paths.get(home).resolve("shapes.json");
-//    }
-
-    //default save
-//    public void save(){
-//        save(getDefaultPath());
-//    }
-
-
     //custom save
     public void save(Path path){
         JsonArray ja = new JsonArray();
