@@ -23,6 +23,12 @@ public class ShapeFactory {
             case "Rectangle" -> {
                 return new Rectangle();
             }
+            case "Star" -> {
+                return new Star();
+            }
+            case "RegularPolygon" -> {
+                return new RegularPolygon();
+            }
             default -> throw new RuntimeException();
         }
     }

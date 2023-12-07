@@ -72,9 +72,15 @@ public class ShapeService {
         }
     }
 
+    public void saveShapes(){
+        for(Map.Entry<Long, Stack<Shape>> entry : Shapes.entrySet())
+            if (!entry.getValue().empty())
+                list.add(entry.getValue().peek());
+    }
+
     public void setMapFromList(){
         for (Shape shape : list) {
-            Stack<Shape> stack = new Stack<Shape>();
+            Stack<Shape> stack = new Stack<>();
             stack.push(shape);
             Shapes.put(generalIndex, stack);
             generalIndex++;

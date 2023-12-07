@@ -14,10 +14,11 @@ public class UndoRedo {
         Shape LastShape = undo.peek();
         undo.pop();
         long index = LastShape.getIndex();
-//        System.out.println(index);
+
         //push in redo and pop from map
         redo.push(LastShape);
         shapes.get(index).pop();
+
     }
     public void Redo(Stack<Shape> undo, Stack<Shape> redo, Map<Long, Stack<Shape>> shapes){
         if(redo.empty())

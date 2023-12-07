@@ -13,6 +13,7 @@ public class xmlSave {
         this.shapeService = shapeService;
     }
 
+    //custom save
     public void save(Path path){
         try {
             FileOutputStream fos = new FileOutputStream(path.toFile());
@@ -23,7 +24,8 @@ public class xmlSave {
             encoder.close();
             fos.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("shapes not saved");
+//            throw new RuntimeException(e);
         }
 
     }

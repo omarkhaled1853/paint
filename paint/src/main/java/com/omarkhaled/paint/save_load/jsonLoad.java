@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +39,10 @@ public class jsonLoad {
                     Circle circle = (Circle) shape;
                     circle.setRadius(((BigDecimal) jo.get("radius")).doubleValue());
                 }
-                case "Elipse" -> {
+                case "Ellipse" -> {
                     Elipse elipse = (Elipse) shape;
                     elipse.setRadiusX(((BigDecimal) jo.get("radiusX")).doubleValue());
-                    elipse.setRadiusX(((BigDecimal) jo.get("radiusY")).doubleValue());
+                    elipse.setRadiusY(((BigDecimal) jo.get("radiusY")).doubleValue());
                 }
                 case "Triangle" -> {
                     Triangle triangle = (Triangle) shape;
@@ -63,48 +62,52 @@ public class jsonLoad {
                     Line line = (Line) shape;
                     line.setPoints((List<Double>) jo.get("points"));
                 }
+                case "Star" -> {
+                    Star star = (Star) shape;
+                    star.setInnerRadius(((BigDecimal) jo.get("innerRadius")).doubleValue());
+                    star.setOuterRadius(((BigDecimal) jo.get("outerRadius")).doubleValue());
+                    star.setNumPoints(((BigDecimal) jo.get("numPoints")).intValue());
+                }
+                case "RegularPolygon" -> {
+                    RegularPolygon regularPolygon = (RegularPolygon) shape;
+                    regularPolygon.setRadius(((BigDecimal) jo.get("radius")).doubleValue());
+                    regularPolygon.setSides(((BigDecimal) jo.get("sides")).intValue());
+                }
                 default -> {
                 }
             }
         return shape;
     }
 
-    //get default path
-    private Path getDefaultPath(){
-        String home = System.getProperty("user.home");
-        return Paths.get(home).resolve("shapes.json");
-    }
-
-    //default load
-    public void load(){
-        load(getDefaultPath());
-    }
-
     //custom load
     public void load(Path path){
-        String jsonText = null;
-        JsonArray ja = null;
+        String jsonText;
+        JsonArray ja;
         try {
             jsonText = new String(Files.readAllBytes(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
             ja = (JsonArray) Jsoner.deserialize(jsonText);
-        } catch (JsonException e) {
-            throw new RuntimeException(e);
+            List<Shape> list = new ArrayList<>();
+            for(Object object : ja){
+                JsonObject jo = (JsonObject) object;
+                list.add(fromJsonObject(jo));
+            }
+            shapeService.setList(list);
+            shapeService.setGeneralIndex(0L);
+            shapeService.setUndo(new Stack<>());
+            shapeService.setRedo(new Stack<>());
+            shapeService.setShapes(new HashMap<>());
+            shapeService.modifyIndex();
+            shapeService.setMapFromList();
+        } catch (IOException | JsonException e) {
+            shapeService.setList(new ArrayList<>());
+            shapeService.setGeneralIndex(0L);
+            shapeService.setUndo(new Stack<>());
+            shapeService.setRedo(new Stack<>());
+            shapeService.setShapes(new HashMap<>());
+            shapeService.modifyIndex();
+            shapeService.setMapFromList();
+//            throw new RuntimeException(e);
         }
-        List<Shape> list = new ArrayList<>();
-        for(Object object : ja){
-            JsonObject jo = (JsonObject) object;
-            list.add(fromJsonObject(jo));
-        }
-        shapeService.setList(list);
-        shapeService.setGeneralIndex(0L);
-        shapeService.setUndo(new Stack<>());
-        shapeService.setRedo(new Stack<>());
-        shapeService.setShapes(new HashMap<>());
-        shapeService.modifyIndex();
-        shapeService.setMapFromList();
+
     }
 }

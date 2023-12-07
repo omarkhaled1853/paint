@@ -76,6 +76,20 @@ public class ShapeController {
                 shapeService.addToUndo(triangle);
                 shapeService.addToMap(triangle);
             }
+            case "Star" -> {
+                Star star = (Star) shape;
+                star = mapper.readValue(type[1], Star.class);
+                star.setIndex(shapeService.getGeneralIndex());
+                shapeService.addToUndo(star);
+                shapeService.addToMap(star);
+            }
+            case "RegularPolygon" -> {
+                RegularPolygon regularPolygon = (RegularPolygon) shape;
+                regularPolygon = mapper.readValue(type[1], RegularPolygon.class);
+                regularPolygon.setIndex(shapeService.getGeneralIndex());
+                shapeService.addToUndo(regularPolygon);
+                shapeService.addToMap(regularPolygon);
+            }
             default -> {}
         }
         shapeService.incrementGeneralIndex();
@@ -84,10 +98,13 @@ public class ShapeController {
     //copy shape (prototype)
     @PostMapping ("/copy")
     public Shape copyShape(@RequestBody String index){
+
+//        System.out.println(index);
+
         Shape shape = shapeService.getShapes().get(Long.parseLong(index)).peek().Clone();
         shape.setIndex(shapeService.getGeneralIndex());
-        shape.setX(shape.getX() + 1.0);
-        shape.setY(shape.getY() + 1.0);
+        shape.setX(shape.getX() + 3.0);
+        shape.setY(shape.getY() + 3.0);
         shapeService.addToUndo(shape);
         shapeService.addToMap(shape);
         shapeService.incrementGeneralIndex();
@@ -138,6 +155,18 @@ public class ShapeController {
                 triangle.setIndex(index);
                 shapeService.addToUndo(triangle);
                 shapeService.getShapes().get(index).push(triangle);
+            }
+            case "Star" -> {
+                Star star = (Star) shape;
+                star.setIndex(index);
+                shapeService.addToUndo(star);
+                shapeService.getShapes().get(index).push(star);
+            }
+            case "RegularPolygon" -> {
+                RegularPolygon regularPolygon = (RegularPolygon) shape;
+                regularPolygon.setIndex(index);
+                shapeService.addToUndo(regularPolygon);
+                shapeService.getShapes().get(index).push(regularPolygon);
             }
             default -> {}
         }
@@ -196,8 +225,31 @@ public class ShapeController {
                 shapeService.addToUndo(triangle);
                 shapeService.getShapes().get(index).push(triangle);
             }
+            case "Star" -> {
+                Star star = (Star) shape;
+                star = mapper.readValue(type[2], Star.class);
+                star.setIndex(index);
+                shapeService.addToUndo(star);
+                shapeService.getShapes().get(index).push(star);
+            }
+            case "RegularPolygon" -> {
+                RegularPolygon regularPolygon = (RegularPolygon) shape;
+                regularPolygon = mapper.readValue(type[2], RegularPolygon.class);
+                regularPolygon.setIndex(index);
+                shapeService.addToUndo(regularPolygon);
+                shapeService.getShapes().get(index).push(regularPolygon);
+            }
             default -> {}
         }
+    }
+
+    //clear all shapes
+    @GetMapping ("/clear")
+    public void clear (){
+        shapeService.setGeneralIndex(0L);
+        shapeService.setRedo(new Stack<>());
+        shapeService.setUndo(new Stack<>());
+        shapeService.setShapes(new HashMap<>());
     }
 
     //save json file
@@ -205,7 +257,7 @@ public class ShapeController {
     public void saveJson(@RequestBody String path){
         List<Shape> list = new ArrayList<>();
         shapeService.setList(list);
-        shapeService.setListFromMap();
+        shapeService.saveShapes();
         jsonSave jsonSave = new jsonSave(shapeService);
         jsonSave.save(Paths.get(path));
     }
@@ -215,7 +267,7 @@ public class ShapeController {
     public void saveXml(@RequestBody String path){
         List<Shape> list = new ArrayList<>();
         shapeService.setList(list);
-        shapeService.setListFromMap();
+        shapeService.saveShapes();
         xmlSave xmlSave = new xmlSave(shapeService);
         xmlSave.save(Paths.get(path));
     }
@@ -228,6 +280,7 @@ public class ShapeController {
         return shapeService.getList();
     }
 
+    //load json file
     @PostMapping ("/loadXml")
     //load xml file
     public List<Shape> loadXml(@RequestBody String path){

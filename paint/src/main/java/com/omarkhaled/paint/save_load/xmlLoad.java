@@ -18,8 +18,9 @@ public class xmlLoad {
         this.shapeService = shapeService;
     }
 
+    //custom load
     public void load(Path path){
-        FileInputStream fis = null;
+        FileInputStream fis;
         try {
             fis = new FileInputStream(path.toFile());
             XMLDecoder decoder = new XMLDecoder(fis);
@@ -40,7 +41,15 @@ public class xmlLoad {
             shapeService.modifyIndex();
             shapeService.setMapFromList();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            shapeService.setList(new ArrayList<>());
+            shapeService.setGeneralIndex(0L);
+            shapeService.setUndo(new Stack<>());
+            shapeService.setRedo(new Stack<>());
+            shapeService.setShapes(new HashMap<>());
+            shapeService.modifyIndex();
+            shapeService.setMapFromList();
+
+//            throw new RuntimeException(e);
         }
 
     }

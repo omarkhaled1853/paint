@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 public class jsonSave {
-    private ShapeService shapeService;
+    private final ShapeService shapeService;
 
     public jsonSave(ShapeService shapeService) {
         this.shapeService = shapeService;
@@ -55,6 +55,17 @@ public class jsonSave {
                 Line line = (Line) shape;
                 jo.put("points", line.getPoints());
             }
+            case "Star" -> {
+                Star star = (Star) shape;
+                jo.put("innerRadius", star.getInnerRadius());
+                jo.put("outerRadius", star.getOuterRadius());
+                jo.put("numPoints", star.getNumPoints());
+            }
+            case "RegularPolygon" -> {
+                RegularPolygon regularPolygon = (RegularPolygon) shape;
+                jo.put("radius", regularPolygon.getRadius());
+                jo.put("sides", regularPolygon.getSides());
+            }
             default -> {
             }
         }
@@ -72,7 +83,8 @@ public class jsonSave {
         try {
             Files.write(path, jsonText.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("shapes not saved");
+//            throw new RuntimeException(e);
         }
     }
 }
