@@ -9,6 +9,13 @@ public abstract class Shape {
     private String fill;
     private String stroke;
     private double strokeWidth;
+
+    private double rotation;
+
+    private double scaleX;
+
+    private double scaleY;
+
     private long index;
 
     @XmlElement
@@ -51,6 +58,31 @@ public abstract class Shape {
     public void setStrokeWidth(double strokeWidth) {
         this.strokeWidth = strokeWidth;
     }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
+    public double getScaleX() {
+        return scaleX;
+    }
+
+    public void setScaleX(double scaleX) {
+        this.scaleX = scaleX;
+    }
+
+    public double getScaleY() {
+        return scaleY;
+    }
+
+    public void setScaleY(double scaleY) {
+        this.scaleY = scaleY;
+    }
+
     public Long getIndex() {
         return index;
     }

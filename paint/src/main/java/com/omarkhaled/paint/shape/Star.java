@@ -47,6 +47,9 @@ public class Star extends Shape{
         copy.setNumPoints(this.getNumPoints());
         copy.setInnerRadius(this.getInnerRadius());
         copy.setOuterRadius(this.getOuterRadius());
+        copy.setRotation(this.getRotation());
+        copy.setScaleX(this.getScaleX());
+        copy.setScaleY(this.getScaleY());
         return copy;
     }
 }

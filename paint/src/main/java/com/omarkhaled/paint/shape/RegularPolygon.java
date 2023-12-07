@@ -37,6 +37,9 @@ public class RegularPolygon extends Shape {
         copy.setIndex(this.getIndex());
         copy.setSides(this.getSides());
         copy.setRadius(this.getRadius());
+        copy.setRotation(this.getRotation());
+        copy.setScaleX(this.getScaleX());
+        copy.setScaleY(this.getScaleY());
         return copy;
     }
 }

@@ -29,6 +29,9 @@ public class Line extends Shape{
         copy.setStroke(this.getStroke());
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
+        copy.setRotation(this.getRotation());
+        copy.setScaleX(this.getScaleX());
+        copy.setScaleY(this.getScaleY());
         return copy;
     }
 }

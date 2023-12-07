@@ -33,6 +33,9 @@ public class jsonLoad {
             shape.setFill((String) jo.get("fill"));
             shape.setStroke((String) jo.get("stroke"));
             shape.setStrokeWidth(((BigDecimal) jo.get("strokeWidth")).doubleValue());
+            shape.setRotation(((BigDecimal) jo.get("rotation")).doubleValue());
+            shape.setScaleX(((BigDecimal) jo.get("scaleX")).doubleValue());
+            shape.setScaleY(((BigDecimal) jo.get("scaleY")).doubleValue());
 
             switch ((String) jo.get("type")) {
                 case "Circle" -> {

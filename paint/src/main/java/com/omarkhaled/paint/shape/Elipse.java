@@ -33,6 +33,9 @@ public class Elipse extends Shape{
         copy.setFill(this.getFill());
         copy.setRadiusX(this.getRadiusX());
         copy.setRadiusY(this.getRadiusY());
+        copy.setRotation(this.getRotation());
+        copy.setScaleX(this.getScaleX());
+        copy.setScaleY(this.getScaleY());
         return copy;
     }
 }

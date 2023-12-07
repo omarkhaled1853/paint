@@ -25,7 +25,9 @@ public class Triangle extends Shape{
         copy.setStrokeWidth(this.getStrokeWidth());
         copy.setFill(this.getFill());
         copy.setRadius(this.getRadius());
-
+        copy.setRotation(this.getRotation());
+        copy.setScaleX(this.getScaleX());
+        copy.setScaleY(this.getScaleY());
         return copy;
     }
 }

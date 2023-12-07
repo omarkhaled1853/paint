@@ -49,8 +49,8 @@ public class ShapeController {
                 shapeService.addToMap(Square);
             }
             case "Rectangle" -> {
-                Rectangle Rectangle = (com.omarkhaled.paint.shape.Rectangle) shape;
-                Rectangle = mapper.readValue(type[1], com.omarkhaled.paint.shape.Rectangle.class);
+                Rectangle Rectangle = (Rectangle) shape;
+                Rectangle = mapper.readValue(type[1], Rectangle.class);
                 Rectangle.setIndex(shapeService.getGeneralIndex());
                 shapeService.addToUndo(Rectangle);
                 shapeService.addToMap(Rectangle);
@@ -98,9 +98,6 @@ public class ShapeController {
     //copy shape (prototype)
     @PostMapping ("/copy")
     public Shape copyShape(@RequestBody String index){
-
-//        System.out.println(index);
-
         Shape shape = shapeService.getShapes().get(Long.parseLong(index)).peek().Clone();
         shape.setIndex(shapeService.getGeneralIndex());
         shape.setX(shape.getX() + 3.0);

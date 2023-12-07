@@ -27,6 +27,10 @@ public class jsonSave {
         jo.put("fill", shape.getFill());
         jo.put("stroke", shape.getStroke());
         jo.put("strokeWidth", shape.getStrokeWidth());
+        jo.put("rotation", shape.getRotation());
+        jo.put("scaleX", shape.getScaleX());
+        jo.put("scaleY", shape.getScaleY());
+
         switch (shape.getType()) {
             case "Circle" -> {
                 Circle circle = (Circle) shape;
@@ -84,7 +88,6 @@ public class jsonSave {
             Files.write(path, jsonText.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
             System.out.println("shapes not saved");
-//            throw new RuntimeException(e);
         }
     }
 }

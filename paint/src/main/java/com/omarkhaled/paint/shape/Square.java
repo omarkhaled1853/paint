@@ -34,6 +34,9 @@ public class Square extends Shape{
         copy.setFill(this.getFill());
         copy.setHeight(this.getHeight());
         copy.setWidth(this.getWidth());
+        copy.setRotation(this.getRotation());
+        copy.setScaleX(this.getScaleX());
+        copy.setScaleY(this.getScaleY());
         return copy;
     }
 }

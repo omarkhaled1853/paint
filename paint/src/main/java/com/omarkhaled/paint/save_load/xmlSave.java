@@ -25,7 +25,6 @@ public class xmlSave {
             fos.close();
         } catch (IOException e) {
             System.out.println("shapes not saved");
-//            throw new RuntimeException(e);
         }
 
     }
