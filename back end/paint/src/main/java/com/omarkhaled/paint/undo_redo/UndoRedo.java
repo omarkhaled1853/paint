@@ -12,9 +12,6 @@ public class UndoRedo {
 
         //pop from undo
         Shape LastShape = undo.peek();
-
-//        System.out.println(LastShape.getRotation());
-
         undo.pop();
         String id = LastShape.getId();
 

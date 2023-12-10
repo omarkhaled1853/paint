@@ -88,7 +88,6 @@ public class ShapeController {
     //copy shape (prototype)
     @PostMapping ("/copy")
     public Shape copyShape(@RequestBody String id){
-        System.out.println(id);
         Shape shape = shapeService.getShapes().get(id).peek().Clone();
         shape.setId(Integer.toString(shapeService.getShapes().size()));
         shape.setX(shape.getX() + 3.0);
