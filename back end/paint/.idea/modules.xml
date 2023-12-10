@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<<< HEAD:back end/paint/.idea/modules.xml
       <module fileurl="file://$PROJECT_DIR$/paint.iml" filepath="$PROJECT_DIR$/paint.iml" />
+========
+      <module fileurl="file://$PROJECT_DIR$/.idea/back end.iml" filepath="$PROJECT_DIR$/.idea/back end.iml" />
+>>>>>>>> saveLoad:back end/.idea/modules.xml
     </modules>
   </component>
 </project>
