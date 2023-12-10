@@ -1,14 +1,14 @@
 <template>
-  <HelloWorld/>
+  <Paint/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Paint from './components/Paint.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Paint
   }
 }
 </script>

@@ -318,12 +318,11 @@ scaleY:polygon.scaleY
 </template>
 
 <script>
-// import Vue from 'vue';
 import { ref } from "vue";
 import { ColorInputWithoutInstance } from "tinycolor2";
 
 export default  {
-  name: 'HelloWorld',
+  name: 'Paint-',
   data() {
     return {
       value: null,
