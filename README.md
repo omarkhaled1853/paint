@@ -1,5 +1,7 @@
 # paint
 
+<p align="center"><img src="/Screenshot 2023-12-10 131405.png" width = 400></p>
+
 ## Overview
 Welcome to the Paint Project, a versatile graphical application that allows users to draw various shapes, resize them, apply colors, customize borders, make copies, move shapes, and save/load paintings in JSON or XML formats.
 
