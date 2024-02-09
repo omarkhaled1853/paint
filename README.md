@@ -1,4 +1,4 @@
-# paint
+# paint:
 
 <p align="center"><img src="/Screenshot 2023-12-10 131405.png"></p>
 
